@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enterprise SEO/AEO Command Center — v4.0</title>
+    <title>Enterprise Marketing Command Center — v5.0</title>
 
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <!-- Chart.js for advanced visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
         /* ─── ROOT ─── */
@@ -34,6 +37,7 @@
             --serp-bg: #fff;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
             --radius: 14px;
+            --transition: 0.3s ease;
         }
 
         [data-theme="dark"] {
@@ -55,7 +59,9 @@
 
         *,
         *::before,
-        *::after { box-sizing: border-box; }
+        *::after {
+            box-sizing: border-box;
+        }
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(145deg, var(--body-bg-start) 0%, var(--body-bg-end) 100%);
@@ -76,23 +82,35 @@
             pointer-events: none;
         }
         .shape-1 {
-            width: 60vw; height: 60vw;
+            width: 60vw;
+            height: 60vw;
             background: var(--primary-light);
-            top: -20%; left: -10%;
+            top: -20%;
+            left: -10%;
             opacity: 0.5;
         }
         .shape-2 {
-            width: 50vw; height: 50vw;
+            width: 50vw;
+            height: 50vw;
             background: #e0cffc;
-            bottom: -20%; right: -10%;
+            bottom: -20%;
+            right: -10%;
             animation-delay: -11s;
             opacity: 0.4;
         }
-        [data-theme="dark"] .shape-1 { opacity: 0.15; }
-        [data-theme="dark"] .shape-2 { opacity: 0.1; }
+        [data-theme="dark"] .shape-1 {
+            opacity: 0.15;
+        }
+        [data-theme="dark"] .shape-2 {
+            opacity: 0.1;
+        }
         @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(6%, 6%) scale(1.05); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                transform: translate(6%, 6%) scale(1.05);
+            }
         }
 
         .glass-panel {
@@ -110,17 +128,29 @@
         .glass-panel::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 4px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), #6ea8fe, var(--primary));
             background-size: 200% 100%;
             animation: shimmer 4s infinite linear;
         }
         @keyframes shimmer {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 200% 0%; }
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 200% 0%;
+            }
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-weight: 600;
             color: var(--text);
             letter-spacing: -0.3px;
@@ -149,9 +179,12 @@
             color: #fff;
             box-shadow: 0 4px 16px rgba(10, 88, 202, 0.25);
         }
-        .nav-pills .nav-link .material-icons-outlined { font-size: 1.3rem; }
+        .nav-pills .nav-link .material-icons-outlined {
+            font-size: 1.3rem;
+        }
 
-        .form-control, .form-select {
+        .form-control,
+        .form-select {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text);
@@ -160,7 +193,8 @@
             font-size: 0.95rem;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-control:focus, .form-select:focus {
+        .form-control:focus,
+        .form-select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(10, 88, 202, 0.12);
         }
@@ -244,22 +278,32 @@
             align-items: center;
             gap: 8px;
         }
-        [data-theme="dark"] .serp-url { color: #bdc1c6; }
+        [data-theme="dark"] .serp-url {
+            color: #bdc1c6;
+        }
         .serp-title {
             color: #1a0dab;
             font-size: 20px;
             font-weight: 400;
             cursor: default;
         }
-        [data-theme="dark"] .serp-title { color: #8ab4f8; }
+        [data-theme="dark"] .serp-title {
+            color: #8ab4f8;
+        }
         .serp-desc {
             color: #4d5156;
             font-size: 14px;
             line-height: 1.58;
         }
-        [data-theme="dark"] .serp-desc { color: #bdc1c6; }
-        .serp-mobile .serp-title { font-size: 16px; }
-        .serp-mobile .serp-desc { font-size: 13px; }
+        [data-theme="dark"] .serp-desc {
+            color: #bdc1c6;
+        }
+        .serp-mobile .serp-title {
+            font-size: 16px;
+        }
+        .serp-mobile .serp-desc {
+            font-size: 13px;
+        }
 
         .cwv-badge {
             font-size: 0.75rem;
@@ -269,7 +313,8 @@
         }
 
         .grade-circle {
-            width: 80px; height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -278,17 +323,28 @@
             font-weight: 800;
             color: #fff;
             margin: 0 auto 0.5rem;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
-        .grade-A { background: linear-gradient(135deg, #2e7d32, #43a047); }
-        .grade-B { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
-        .grade-C { background: linear-gradient(135deg, #f9a825, #fbc02d); }
-        .grade-D { background: linear-gradient(135deg, #ef6c00, #fb8c00); }
-        .grade-F { background: linear-gradient(135deg, #c62828, #e53935); }
+        .grade-A {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+        }
+        .grade-B {
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
+        }
+        .grade-C {
+            background: linear-gradient(135deg, #f9a825, #fbc02d);
+        }
+        .grade-D {
+            background: linear-gradient(135deg, #ef6c00, #fb8c00);
+        }
+        .grade-F {
+            background: linear-gradient(135deg, #c62828, #e53935);
+        }
 
         .toast-container {
             position: fixed;
-            bottom: 24px; right: 24px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1060;
             display: flex;
             flex-direction: column;
@@ -299,7 +355,7 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
             padding: 14px 20px;
             display: flex;
             align-items: center;
@@ -307,21 +363,48 @@
             animation: slideUp 0.3s ease;
             color: var(--text);
         }
-        .toast-custom.success { border-left: 4px solid #2e7d32; }
-        .toast-custom.error { border-left: 4px solid #c62828; }
-        .toast-custom.warning { border-left: 4px solid #f9a825; }
+        .toast-custom.success {
+            border-left: 4px solid #2e7d32;
+        }
+        .toast-custom.error {
+            border-left: 4px solid #c62828;
+        }
+        .toast-custom.warning {
+            border-left: 4px solid #f9a825;
+        }
         @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
-        .fs-7 { font-size: 0.8rem; }
-        .fs-8 { font-size: 0.7rem; }
-        .border-end-md { border-right: 1px solid var(--border-color); }
+        .fs-7 {
+            font-size: 0.8rem;
+        }
+        .fs-8 {
+            font-size: 0.7rem;
+        }
+        .border-end-md {
+            border-right: 1px solid var(--border-color);
+        }
         @media (max-width: 768px) {
-            .border-end-md { border-right: none; }
-            .glass-panel { padding: 1.5rem; border-radius: 1.5rem; }
-            .grade-circle { width: 60px; height: 60px; font-size: 1.8rem; }
+            .border-end-md {
+                border-right: none;
+            }
+            .glass-panel {
+                padding: 1.5rem;
+                border-radius: 1.5rem;
+            }
+            .grade-circle {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
         }
 
         .theme-toggle {
@@ -337,7 +420,9 @@
             transition: all 0.3s ease;
             font-size: 0.85rem;
         }
-        .theme-toggle:hover { border-color: var(--primary); }
+        .theme-toggle:hover {
+            border-color: var(--primary);
+        }
 
         .competitor-row {
             display: grid;
@@ -409,7 +494,8 @@
         }
 
         .score-ring {
-            width: 56px; height: 56px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -422,14 +508,22 @@
 
         .pulse-dot {
             display: inline-block;
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: #2e7d32;
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
         }
 
         .audit-score-big {
@@ -444,7 +538,9 @@
             border-bottom: 1px solid var(--border-color);
             font-size: 0.9rem;
         }
-        .audit-detail-item:last-child { border-bottom: none; }
+        .audit-detail-item:last-child {
+            border-bottom: none;
+        }
         .audit-insight {
             padding: 10px 14px;
             border-radius: 10px;
@@ -490,9 +586,18 @@
             font-size: 0.7rem;
             font-weight: 600;
         }
-        .tech-tag.success { background: var(--success-bg); color: var(--success); }
-        .tech-tag.warning { background: var(--warning-bg); color: var(--warning); }
-        .tech-tag.danger { background: var(--danger-bg); color: var(--danger); }
+        .tech-tag.success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+        .tech-tag.warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+        .tech-tag.danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
 
         .rich-badge {
             display: inline-flex;
@@ -510,6 +615,100 @@
             background: #1A2A3A;
             color: #8ab4f8;
         }
+
+        /* Chart containers */
+        .chart-container {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        /* Project selector */
+        .project-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .project-selector .badge {
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text);
+            transition: all 0.2s;
+        }
+        .project-selector .badge.active-project {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+        .project-selector .badge:hover:not(.active-project) {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        /* Gap analysis table */
+        .gap-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 12px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .gap-row.header {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+        }
+        .gap-row .badge {
+            font-size: 0.7rem;
+        }
+
+        .backlink-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        .backlink-item:last-child {
+            border-bottom: none;
+        }
+
+        .trend-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .trend-up {
+            color: var(--success);
+        }
+        .trend-down {
+            color: var(--danger);
+        }
+        .trend-stable {
+            color: var(--warning);
+        }
+
+        .generated-content-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.2rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -524,15 +723,15 @@
             <div class="col-md-7">
                 <h2 class="mb-0 d-flex align-items-center gap-2">
                     <span class="material-icons-outlined text-primary" style="font-size:2.4rem;">domain</span>
-                    <span>Search Intel <span style="font-weight:300;">Core</span></span>
-                    <span class="badge bg-primary text-white ms-2 fs-7 fw-normal">v4.0</span>
+                    <span>Marketing <span style="font-weight:300;">Command Center</span></span>
+                    <span class="badge bg-primary text-white ms-2 fs-7 fw-normal">v5.0</span>
                 </h2>
-                <p class="text-muted mb-0 mt-1 fs-6">Enterprise Semantic · Schema · Geospatial · Technical · Competitive</p>
+                <p class="text-muted mb-0 mt-1 fs-6">AI‑Powered · Multi‑Channel · Enterprise Ready</p>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0 d-flex flex-wrap align-items-center justify-content-md-end gap-2">
                 <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2">
                     <span class="material-icons-outlined text-success" style="font-size:1.1rem;">cloud_done</span>
-                    Network Synced
+                    Synced
                 </span>
                 <button class="theme-toggle" id="themeToggle">
                     <span class="material-icons-outlined" id="themeIcon">dark_mode</span>
@@ -544,23 +743,39 @@
             </div>
         </div>
 
+        <!-- PROJECT SELECTOR -->
+        <div class="mb-4 project-selector" id="projectSelector">
+            <span class="text-muted fs-7 fw-semibold me-2">Project:</span>
+            <span class="badge active-project" data-project="default">Default</span>
+            <span class="badge" data-project="project1">Project A</span>
+            <span class="badge" data-project="project2">Project B</span>
+            <button class="btn-outline-custom btn-sm" id="btnNewProject" style="padding:0.2rem 0.8rem;font-size:0.75rem;">
+                <span class="material-icons-outlined" style="font-size:1rem;">add</span> New
+            </button>
+            <button class="btn-outline-custom btn-sm" id="btnDeleteProject" style="padding:0.2rem 0.8rem;font-size:0.75rem;color:var(--danger);">
+                <span class="material-icons-outlined" style="font-size:1rem;">delete</span>
+            </button>
+        </div>
+
         <!-- GLASS PANEL -->
         <div class="glass-panel">
             <div class="row min-vh-50">
                 <!-- SIDEBAR NAV -->
                 <div class="col-lg-3 pe-lg-4 border-end-md">
-                    <h6 class="text-uppercase text-muted mb-3 fs-7 fw-bold" style="letter-spacing:0.6px;">Optimization Suite</h6>
+                    <h6 class="text-uppercase text-muted mb-3 fs-7 fw-bold" style="letter-spacing:0.6px;">Modules</h6>
                     <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
                         <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#mod-dashboard"><span class="material-icons-outlined">dashboard</span> Dashboard</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-content"><span class="material-icons-outlined">edit_note</span> Content</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-content"><span class="material-icons-outlined">edit_note</span> Content AI</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-schema"><span class="material-icons-outlined">data_object</span> Schema</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-geo"><span class="material-icons-outlined">public</span> GEO</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-audit"><span class="material-icons-outlined">search</span> AEO/GEO Audit</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-tech"><span class="material-icons-outlined">code</span> Technical SEO</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-keywords"><span class="material-icons-outlined">trending_up</span> Keywords</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-competitors"><span class="material-icons-outlined">compare_arrows</span> Competitor Gap</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-backlinks"><span class="material-icons-outlined">link</span> Backlinks</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-serp"><span class="material-icons-outlined">preview</span> SERP</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-cwv"><span class="material-icons-outlined">speed</span> Web Vitals</button>
-                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-competitors"><span class="material-icons-outlined">compare_arrows</span> Competitors</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-trends"><span class="material-icons-outlined">show_chart</span> Trends</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-history"><span class="material-icons-outlined">history</span> History</button>
                         <hr class="my-3 opacity-25" />
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-settings"><span class="material-icons-outlined">security</span> Config</button>
@@ -571,60 +786,146 @@
                 <div class="col-lg-9 ps-lg-4 mt-4 mt-lg-0">
                     <div class="tab-content h-100" id="v-pills-tabContent">
 
-                        <!-- DASHBOARD -->
+                        <!-- ═══ DASHBOARD ═══ -->
                         <div class="tab-pane fade show active" id="mod-dashboard" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
-                                <h4 class="mb-0">SEO Health Dashboard</h4>
+                                <h4 class="mb-0">Marketing Dashboard</h4>
                                 <span class="badge bg-success text-white d-flex align-items-center gap-1 px-3 py-2">
                                     <span class="pulse-dot me-1"></span> Live
                                 </span>
                             </div>
-                            <div class="row g-4 mb-4">
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="grade-circle grade-B" id="overallGrade">B+</div><div class="metric-label">Overall Grade</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="dashScore">84</div><div class="metric-label">SEO Score /100</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="dashKeywords">12</div><div class="metric-label">Target Keywords</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="dashBacklinks">1.4k</div><div class="metric-label">Domain Authority</div></div></div>
+                            <!-- KPI Widgets -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center">
+                                        <div class="metric-val" id="kpiTraffic">12.4k</div>
+                                        <div class="metric-label">Organic Traffic</div>
+                                        <small class="text-success">▲ 8.2%</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center">
+                                        <div class="metric-val" id="kpiCtr">4.2%</div>
+                                        <div class="metric-label">Avg. CTR</div>
+                                        <small class="text-success">▲ 0.6%</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center">
+                                        <div class="metric-val" id="kpiPosition">12.7</div>
+                                        <div class="metric-label">Avg. Position</div>
+                                        <small class="text-danger">▼ 1.2</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center">
+                                        <div class="metric-val" id="kpiConversions">387</div>
+                                        <div class="metric-label">Conversions</div>
+                                        <small class="text-success">▲ 14%</small>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row g-4">
-                                <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-3">Content Score Breakdown</h6>
-                                    <div class="mb-2 d-flex justify-content-between fs-7"><span>Readability</span> <span class="fw-bold" id="dashReadability">78%</span></div>
-                                    <div class="progress-thin mb-3"><div class="progress-bar bg-primary" style="width:78%" id="dashReadabilityBar"></div></div>
-                                    <div class="mb-2 d-flex justify-content-between fs-7"><span>Keyword Density</span> <span class="fw-bold" id="dashDensity">62%</span></div>
-                                    <div class="progress-thin mb-3"><div class="progress-bar bg-info" style="width:62%" id="dashDensityBar"></div></div>
-                                    <div class="mb-2 d-flex justify-content-between fs-7"><span>Entity Richness</span> <span class="fw-bold" id="dashEntities">71%</span></div>
-                                    <div class="progress-thin"><div class="progress-bar bg-success" style="width:71%" id="dashEntitiesBar"></div></div>
-                                </div></div>
-                                <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-3">Top Recommendations</h6>
-                                    <ul class="list-unstyled fs-7 mb-0" id="dashRecommendations">
-                                        <li class="d-flex gap-2 mb-2"><span class="material-icons-outlined text-warning" style="font-size:1rem;">lightbulb</span> Increase keyword density to 2.5%</li>
-                                        <li class="d-flex gap-2 mb-2"><span class="material-icons-outlined text-warning" style="font-size:1rem;">lightbulb</span> Add 2–3 more internal links</li>
-                                        <li class="d-flex gap-2"><span class="material-icons-outlined text-success" style="font-size:1rem;">check_circle</span> Schema markup is valid</li>
-                                    </ul>
-                                </div></div>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="tab-pane fade" id="mod-content" role="tabpanel">
-                            <h4 class="mb-4">Semantic Content Intelligence</h4>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-6"><label class="form-label text-muted fs-7 fw-semibold">Target Entity / Keyword</label><input type="text" id="targetKeyword" class="form-control" value="enterprise software" /></div>
-                                <div class="col-md-6"><label class="form-label text-muted fs-7 fw-semibold">Content Goal</label><select id="contentGoal" class="form-select"><option value="inform">Inform / Educate</option><option value="persuade">Persuade / Convert</option><option value="entertain">Entertain</option></select></div>
-                            </div>
-                            <div class="mb-3"><label class="form-label text-muted fs-7 fw-semibold">Draft Content</label><textarea id="draftContent" class="form-control" rows="5">Modern enterprise software solutions streamline complex organizational workflows. By integrating cloud-based enterprise software, companies can achieve unparalleled scalability and data security. The implementation of robust enterprise software architecture requires careful planning and specialized IT governance.</textarea></div>
-                            <div class="row g-3 mb-3">
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="wordCount">0</div><div class="metric-label">Word Count</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="kwDensity">0%</div><div class="metric-label">Entity Density</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="readabilityScore">--</div><div class="metric-label">Flesch Reading Ease</div></div></div>
-                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="sentimentScore">😐</div><div class="metric-label">Sentiment</div></div></div>
+                            <!-- Charts -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-2">Traffic Trend (30d)</h6>
+                                        <div class="chart-container"><canvas id="trafficChart"></canvas></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-2">Keyword Distribution</h6>
+                                        <div class="chart-container"><canvas id="keywordPieChart"></canvas></div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row g-3">
-                                <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-2 fs-7">Extracted Entities</h6><div id="entityContainer" class="d-flex flex-wrap gap-1"><span class="entity-tag">enterprise software</span><span class="entity-tag">cloud-based</span><span class="entity-tag">scalability</span><span class="entity-tag">data security</span><span class="entity-tag">IT governance</span></div></div></div>
-                                <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-2 fs-7">Keyword Suggestions</h6><div id="suggestionContainer" class="d-flex flex-wrap gap-1"><span class="chip">enterprise cloud</span><span class="chip">software architecture</span><span class="chip">digital transformation</span><span class="chip">IT scalability</span><span class="chip">secure workflows</span></div></div></div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3">Content Score Breakdown</h6>
+                                        <div class="mb-2 d-flex justify-content-between fs-7"><span>Readability</span> <span class="fw-bold" id="dashReadability">78%</span></div>
+                                        <div class="progress-thin mb-3"><div class="progress-bar bg-primary" style="width:78%" id="dashReadabilityBar"></div></div>
+                                        <div class="mb-2 d-flex justify-content-between fs-7"><span>Keyword Density</span> <span class="fw-bold" id="dashDensity">62%</span></div>
+                                        <div class="progress-thin mb-3"><div class="progress-bar bg-info" style="width:62%" id="dashDensityBar"></div></div>
+                                        <div class="mb-2 d-flex justify-content-between fs-7"><span>Entity Richness</span> <span class="fw-bold" id="dashEntities">71%</span></div>
+                                        <div class="progress-thin"><div class="progress-bar bg-success" style="width:71%" id="dashEntitiesBar"></div></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3">Top Recommendations</h6>
+                                        <ul class="list-unstyled fs-7 mb-0" id="dashRecommendations">
+                                            <li class="d-flex gap-2 mb-2"><span class="material-icons-outlined text-warning" style="font-size:1rem;">lightbulb</span> Increase keyword density to 2.5%</li>
+                                            <li class="d-flex gap-2 mb-2"><span class="material-icons-outlined text-warning" style="font-size:1rem;">lightbulb</span> Add 2–3 more internal links</li>
+                                            <li class="d-flex gap-2"><span class="material-icons-outlined text-success" style="font-size:1rem;">check_circle</span> Schema markup is valid</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- SCHEMA -->
+                        <!-- ═══ CONTENT AI ═══ -->
+                        <div class="tab-pane fade" id="mod-content" role="tabpanel">
+                            <h4 class="mb-4">AI Content Intelligence</h4>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted fs-7 fw-semibold">Target Keyword</label>
+                                    <input type="text" id="contentKeyword" class="form-control" value="enterprise software" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted fs-7 fw-semibold">Content Goal</label>
+                                    <select id="contentGoal" class="form-select">
+                                        <option value="inform">Inform / Educate</option>
+                                        <option value="persuade">Persuade / Convert</option>
+                                        <option value="entertain">Entertain</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label text-muted fs-7 fw-semibold">Draft Content</label>
+                                <textarea id="draftContent" class="form-control" rows="5">Modern enterprise software solutions streamline complex organizational workflows. By integrating cloud-based enterprise software, companies can achieve unparalleled scalability and data security. The implementation of robust enterprise software architecture requires careful planning and specialized IT governance.</textarea>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center"><div class="metric-val" id="wordCount">0</div><div class="metric-label">Word Count</div></div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center"><div class="metric-val" id="kwDensity">0%</div><div class="metric-label">Keyword Density</div></div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center"><div class="metric-val" id="readabilityScore">--</div><div class="metric-label">Readability</div></div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="metric-card text-center"><div class="metric-val" id="sentimentScore">😐</div><div class="metric-label">Sentiment</div></div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-2 fs-7">Extracted Entities</h6>
+                                        <div id="entityContainer" class="d-flex flex-wrap gap-1">
+                                            <span class="entity-tag">enterprise software</span>
+                                            <span class="entity-tag">cloud-based</span>
+                                            <span class="entity-tag">scalability</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-2 fs-7">AI Actions</h6>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button class="btn-outline-custom btn-sm" id="btnGenerateContent"><span class="material-icons-outlined" style="font-size:1rem;">auto_awesome</span> Generate</button>
+                                            <button class="btn-outline-custom btn-sm" id="btnImproveContent"><span class="material-icons-outlined" style="font-size:1rem;">enhance</span> Improve</button>
+                                            <button class="btn-outline-custom btn-sm" id="btnSummarize"><span class="material-icons-outlined" style="font-size:1rem;">summarize</span> Summarize</button>
+                                        </div>
+                                        <div class="mt-2 generated-content-box" id="aiOutput" style="display:none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ SCHEMA ═══ -->
                         <div class="tab-pane fade" id="mod-schema" role="tabpanel">
                             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                                 <h4 class="mb-0">JSON-LD Schema Architect</h4>
@@ -635,13 +936,13 @@
                             </div>
                             <div class="mb-3"><label class="form-label text-muted fs-7 fw-semibold">Schema Type</label><select id="schemaType" class="form-select w-50"><option value="Article">Article</option><option value="FAQPage">FAQ Page</option><option value="Organization">Organization</option><option value="Product">Product</option><option value="Event">Event</option></select></div>
                             <div class="mb-3"><textarea id="schemaOutput" class="form-control font-monospace border-0 shadow-sm" rows="12" style="background:var(--card-bg);"></textarea></div>
-                            <div class="d-flex gap-2 flex-wrap"><button class="btn-primary-custom" id="btnGenerateSchema"><span class="material-icons-outlined">refresh</span> Regenerate</button><span class="text-muted fs-7 align-self-center">Valid JSON-LD ensures rich results eligibility.</span></div>
+                            <div class="d-flex gap-2 flex-wrap"><button class="btn-primary-custom" id="btnGenerateSchema"><span class="material-icons-outlined">refresh</span> Regenerate</button><span class="text-muted fs-7 align-self-center">Valid JSON-LD ensures rich results.</span></div>
                         </div>
 
-                        <!-- GEO (legacy) -->
+                        <!-- ═══ GEO ═══ -->
                         <div class="tab-pane fade" id="mod-geo" role="tabpanel">
                             <h4 class="mb-4">Geographical Engine Optimization (GEO)</h4>
-                            <p class="text-muted mb-4 fs-7">Simulated regional salience and visibility impact factors.</p>
+                            <p class="text-muted mb-4 fs-7">Regional salience and visibility impact factors.</p>
                             <div class="row g-4">
                                 <div class="col-md-7"><div class="metric-card text-start"><h6 class="fw-bold mb-4">Regional Entity Salience</h6>
                                     <div class="d-flex justify-content-between fs-7 fw-semibold mb-1"><span>North America</span> <span>88/100</span></div><div class="progress-thin mb-3"><div class="progress-bar bg-primary" style="width:88%"></div></div>
@@ -652,12 +953,12 @@
                             </div>
                         </div>
 
-                        <!-- AEO/GEO AUDIT -->
+                        <!-- ═══ AEO/GEO AUDIT ═══ -->
                         <div class="tab-pane fade" id="mod-audit" role="tabpanel">
                             <h4 class="mb-4">AEO / GEO URL Auditor</h4>
                             <p class="text-muted fs-7 mb-3">Analyze any URL for Answer Engine Optimization (AEO) and Geographical Optimization (GEO) using proprietary formulas.</p>
                             <div class="row g-3 mb-4">
-                                <div class="col-md-8"><label class="form-label text-muted fs-7 fw-semibold">Target URL</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">link</span></span><input type="url" class="form-control border-start-0" id="auditUrl" placeholder="https://example.com/page" value="https://holisticgrowthmarketing.com/" /></div></div>
+                                <div class="col-md-8"><label class="form-label text-muted fs-7 fw-semibold">Target URL</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">link</span></span><input type="url" class="form-control border-start-0" id="auditUrl" placeholder="https://example.com/page" value="https://techcorp.com/enterprise-software" /></div></div>
                                 <div class="col-md-4 d-flex align-items-end"><button class="btn-primary-custom w-100" id="btnRunAudit"><span class="material-icons-outlined">play_arrow</span> Run Audit</button></div>
                             </div>
                             <div id="auditResults" style="display:none;">
@@ -675,10 +976,10 @@
                             <div id="auditLoading" style="display:none;" class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Fetching and analyzing content...</p></div>
                         </div>
 
-                        <!-- TECHNICAL SEO -->
+                        <!-- ═══ TECHNICAL SEO ═══ -->
                         <div class="tab-pane fade" id="mod-tech" role="tabpanel">
                             <h4 class="mb-4">Technical SEO Auditor</h4>
-                            <p class="text-muted fs-7 mb-3">Analyze on-page technical elements from the same URL used in the AEO/GEO audit.</p>
+                            <p class="text-muted fs-7 mb-3">Analyze on-page technical elements from the same URL.</p>
                             <div id="techResults" style="display:none;">
                                 <div class="row g-4 mb-4">
                                     <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="techScore">0</div><div class="metric-label">Technical Score</div><div class="progress-thin mt-2"><div class="progress-bar bg-primary" id="techBar" style="width:0%"></div></div></div></div>
@@ -707,7 +1008,7 @@
                             <button class="btn-primary-custom mt-3" id="btnRunTech"><span class="material-icons-outlined">play_arrow</span> Run Technical Audit</button>
                         </div>
 
-                        <!-- KEYWORD RESEARCH -->
+                        <!-- ═══ KEYWORDS ═══ -->
                         <div class="tab-pane fade" id="mod-keywords" role="tabpanel">
                             <h4 class="mb-4">Keyword Research & People Also Ask</h4>
                             <div class="row g-3 mb-4">
@@ -727,7 +1028,51 @@
                             <div id="keywordLoading" style="display:none;" class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Generating keyword suggestions...</p></div>
                         </div>
 
-                        <!-- SERP -->
+                        <!-- ═══ COMPETITOR GAP ═══ -->
+                        <div class="tab-pane fade" id="mod-competitors" role="tabpanel">
+                            <h4 class="mb-4">Competitor Gap Analysis</h4>
+                            <p class="text-muted fs-7 mb-3">Compare your site against top competitors to identify content and keyword gaps.</p>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6"><label class="form-label text-muted fs-7 fw-semibold">Your Domain</label><input type="text" id="yourDomain" class="form-control" value="techcorp.com" /></div>
+                                <div class="col-md-6"><label class="form-label text-muted fs-7 fw-semibold">Competitor Domains (comma separated)</label><input type="text" id="competitorDomains" class="form-control" value="softwaresolutions.io,enterprisehub.com" /></div>
+                            </div>
+                            <button class="btn-primary-custom mb-4" id="btnRunGap"><span class="material-icons-outlined">compare_arrows</span> Analyze Gap</button>
+                            <div id="gapResults" style="display:none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="gapKeywords">0</div><div class="metric-label">Missing Keywords</div></div></div>
+                                    <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="gapContent">0</div><div class="metric-label">Content Gaps</div></div></div>
+                                    <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="gapOpp">0</div><div class="metric-label">Opportunities</div></div></div>
+                                </div>
+                                <div class="metric-card">
+                                    <h6 class="fw-bold mb-3">Top Keyword Gaps</h6>
+                                    <div id="gapTable"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ BACKLINKS ═══ -->
+                        <div class="tab-pane fade" id="mod-backlinks" role="tabpanel">
+                            <h4 class="mb-4">Backlink Analysis</h4>
+                            <p class="text-muted fs-7 mb-3">Monitor your backlink profile and compare with competitors.</p>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6"><label class="form-label text-muted fs-7 fw-semibold">Domain</label><input type="text" id="backlinkDomain" class="form-control" value="techcorp.com" /></div>
+                                <div class="col-md-6 d-flex align-items-end"><button class="btn-primary-custom w-100" id="btnRunBacklinks"><span class="material-icons-outlined">link</span> Analyze</button></div>
+                            </div>
+                            <div id="backlinkResults" style="display:none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blTotal">0</div><div class="metric-label">Total Backlinks</div></div></div>
+                                    <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blDomains">0</div><div class="metric-label">Referring Domains</div></div></div>
+                                    <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blAuthority">0</div><div class="metric-label">Domain Authority</div></div></div>
+                                    <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blSpam">0%</div><div class="metric-label">Spam Score</div></div></div>
+                                </div>
+                                <div class="metric-card">
+                                    <h6 class="fw-bold mb-3">Top Referring Domains</h6>
+                                    <div id="blTable"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ═══ SERP ═══ -->
                         <div class="tab-pane fade" id="mod-serp" role="tabpanel">
                             <h4 class="mb-4">Live SERP & Rich Results Preview</h4>
                             <div class="row g-4">
@@ -741,7 +1086,7 @@
                             </div>
                         </div>
 
-                        <!-- WEB VITALS -->
+                        <!-- ═══ WEB VITALS ═══ -->
                         <div class="tab-pane fade" id="mod-cwv" role="tabpanel">
                             <h4 class="mb-4">Core Web Vitals Simulator</h4>
                             <p class="text-muted mb-4 fs-7">Adjust metrics to visualize Page Experience impact.</p>
@@ -753,33 +1098,39 @@
                             <div class="mt-4"><div class="metric-card"><h6 class="fw-bold mb-2">Page Experience Score</h6><div class="d-flex align-items-center gap-4"><div class="score-ring bg-success" id="pageExpScore" style="width:64px;height:64px;font-size:1.4rem;">92</div><div><div class="fs-7 text-muted">Based on current CWV values</div><div class="fw-bold" id="pageExpLabel">Excellent — passing all thresholds</div></div></div></div></div>
                         </div>
 
-                        <!-- COMPETITORS -->
-                        <div class="tab-pane fade" id="mod-competitors" role="tabpanel">
-                            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2"><h4 class="mb-0">SERP Competitor Analysis</h4><span class="text-muted fs-7">Simulated data</span></div>
-                            <div class="metric-card p-3"><div class="competitor-row header"><span>Domain</span><span>Position</span><span>DA</span><span>Keywords</span><span>Est. Traffic</span></div>
-                                <div class="competitor-row"><span class="fw-semibold">techcorp.com</span><span class="rank-badge">#1</span><span>84</span><span>1.2k</span><span>45k/mo</span></div>
-                                <div class="competitor-row"><span>softwaresolutions.io</span><span class="rank-badge">#2</span><span>76</span><span>980</span><span>32k/mo</span></div>
-                                <div class="competitor-row"><span>enterprisehub.com</span><span class="rank-badge">#3</span><span>71</span><span>840</span><span>28k/mo</span></div>
-                                <div class="competitor-row"><span>cloudtech.global</span><span class="rank-badge">#4</span><span>65</span><span>720</span><span>19k/mo</span></div>
-                                <div class="competitor-row"><span>nextgensoft.co</span><span class="rank-badge">#5</span><span>58</span><span>610</span><span>14k/mo</span></div>
+                        <!-- ═══ TRENDS ═══ -->
+                        <div class="tab-pane fade" id="mod-trends" role="tabpanel">
+                            <h4 class="mb-4">Market Trends & Seasonality</h4>
+                            <p class="text-muted fs-7 mb-3">Emerging topics and search volume trends for your industry.</p>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-8"><label class="form-label text-muted fs-7 fw-semibold">Topic / Industry</label><input type="text" id="trendTopic" class="form-control" value="enterprise software" /></div>
+                                <div class="col-md-4 d-flex align-items-end"><button class="btn-primary-custom w-100" id="btnTrendAnalysis"><span class="material-icons-outlined">show_chart</span> Analyze</button></div>
                             </div>
-                            <div class="row g-3 mt-2"><div class="col-md-6"><div class="metric-card"><h6 class="fw-bold fs-7 mb-2">Average Position Gap</h6><div class="d-flex align-items-center gap-3"><span class="display-6 fw-bold text-primary">+2.4</span><span class="fs-7 text-muted">vs. top 5 competitors</span></div></div></div><div class="col-md-6"><div class="metric-card"><h6 class="fw-bold fs-7 mb-2">Keyword Overlap</h6><div class="d-flex align-items-center gap-3"><span class="display-6 fw-bold text-success">68%</span><span class="fs-7 text-muted">shared with top 3</span></div></div></div></div>
+                            <div id="trendResults" style="display:none;">
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-2">Search Volume Trend (12 months)</h6><div class="chart-container"><canvas id="trendChart"></canvas></div></div></div>
+                                    <div class="col-md-6"><div class="metric-card"><h6 class="fw-bold mb-2">Emerging Topics</h6><div id="emergingTopics" class="d-flex flex-wrap gap-2"></div></div></div>
+                                </div>
+                                <div class="metric-card"><h6 class="fw-bold mb-2">Seasonality Insights</h6><div id="seasonalityInsights"></div></div>
+                            </div>
+                            <div id="trendLoading" style="display:none;" class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Analyzing trends...</p></div>
                         </div>
 
-                        <!-- HISTORY -->
+                        <!-- ═══ HISTORY ═══ -->
                         <div class="tab-pane fade" id="mod-history" role="tabpanel">
                             <h4 class="mb-4">Audit History</h4>
                             <div id="historyContainer"><div class="history-empty">No audits saved yet. Run an AEO/GEO audit to store results.</div></div>
                             <button class="btn-outline-custom mt-3" id="btnClearHistory"><span class="material-icons-outlined">delete</span> Clear History</button>
                         </div>
 
-                        <!-- SETTINGS -->
+                        <!-- ═══ SETTINGS ═══ -->
                         <div class="tab-pane fade" id="mod-settings" role="tabpanel">
-                            <h4 class="mb-4">System Security & Configuration</h4>
-                            <div class="alert bg-white border shadow-sm d-flex align-items-center gap-3 mb-4" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-primary fs-3">shield</span><p class="mb-0 fs-7 text-muted">API tokens are handled locally. Do not deploy publicly without environment variable encapsulation.</p></div>
-                            <div class="mb-3 w-75"><label class="form-label text-muted fs-7 fw-semibold">OpenAI Token</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">key</span></span><input type="password" class="form-control border-start-0" placeholder="sk-proj-..." /></div></div>
-                            <div class="mb-4 w-75"><label class="form-label text-muted fs-7 fw-semibold">Google Search Console Key</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">cloud</span></span><input type="password" class="form-control border-start-0" placeholder="AIzaSy..." /></div></div>
-                            <button class="btn-primary-custom" id="btnApplyConfig"><span class="material-icons-outlined">save</span> Apply Configuration</button>
+                            <h4 class="mb-4">System Configuration</h4>
+                            <div class="alert bg-white border shadow-sm d-flex align-items-center gap-3 mb-4" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-primary fs-3">shield</span><p class="mb-0 fs-7 text-muted">API keys are stored locally in your browser. Never share them publicly.</p></div>
+                            <div class="mb-3"><label class="form-label text-muted fs-7 fw-semibold">OpenAI API Key</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">key</span></span><input type="password" class="form-control border-start-0" id="openaiKey" placeholder="sk-..." /></div></div>
+                            <div class="mb-3"><label class="form-label text-muted fs-7 fw-semibold">Google Search Console (GSC) API Key</label><div class="input-group"><span class="input-group-text bg-white border-end-0" style="background:var(--card-bg) !important;"><span class="material-icons-outlined text-muted fs-6">cloud</span></span><input type="password" class="form-control border-start-0" id="gscKey" placeholder="AIzaSy..." /></div></div>
+                            <button class="btn-primary-custom" id="btnSaveKeys"><span class="material-icons-outlined">save</span> Save Keys</button>
+                            <div class="mt-3 text-muted fs-7">Keys are saved in localStorage for this session.</div>
                         </div>
 
                     </div><!-- /tab-content -->
@@ -787,7 +1138,7 @@
             </div><!-- /row -->
         </div><!-- /glass-panel -->
 
-        <div class="text-center text-muted fs-8 mt-4 opacity-50">&copy; 2026 Search Intel Core — Enterprise Edition &bull; All data simulated</div>
+        <div class="text-center text-muted fs-8 mt-4 opacity-50">&copy; 2026 Marketing Command Center — Enterprise Edition &bull; All data simulated</div>
     </div>
 
     <!-- TOAST CONTAINER -->
@@ -795,15 +1146,32 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        /* ═══════════════════════════════════════════════════════
+           GLOBAL STATE & UTILITIES
+           ═══════════════════════════════════════════════════════ */
+        const AppState = {
+            projects: JSON.parse(localStorage.getItem('projects') || '{"default":{}}'),
+            currentProject: localStorage.getItem('currentProject') || 'default',
+            apiKeys: JSON.parse(localStorage.getItem('apiKeys') || '{}'),
+        };
+
+        function saveState() {
+            localStorage.setItem('projects', JSON.stringify(AppState.projects));
+            localStorage.setItem('currentProject', AppState.currentProject);
+            localStorage.setItem('apiKeys', JSON.stringify(AppState.apiKeys));
+        }
+
         /* ─── NOTIFIER ─── */
         class Notifier {
             static show(msg, type = 'success') {
                 const container = document.getElementById('toastContainer');
                 const icons = { success: 'check_circle', error: 'error', warning: 'warning' };
-                const html = `<div class="toast-custom ${type}"><span class="material-icons-outlined">${icons[type]||'info'}</span><span>${msg}</span></div>`;
+                const html =
+                    `<div class="toast-custom ${type}"><span class="material-icons-outlined">${icons[type]||'info'}</span><span>${msg}</span></div>`;
                 container.insertAdjacentHTML('beforeend', html);
                 const el = container.lastElementChild;
-                setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 3200);
+                setTimeout(() => { el.style.opacity = '0';
+                    setTimeout(() => el.remove(), 300); }, 3200);
             }
         }
 
@@ -829,14 +1197,79 @@
             }
         }
 
-        /* ─── CONTENT ENGINE ─── */
+        /* ─── PROJECT MANAGER ─── */
+        class ProjectManager {
+            constructor() {
+                this.selector = document.getElementById('projectSelector');
+                this.render();
+                document.getElementById('btnNewProject').addEventListener('click', () => this.newProject());
+                document.getElementById('btnDeleteProject').addEventListener('click', () => this.deleteProject());
+                this.selector.addEventListener('click', (e) => {
+                    const badge = e.target.closest('.badge');
+                    if (badge && badge.dataset.project) {
+                        this.switchProject(badge.dataset.project);
+                    }
+                });
+            }
+            render() {
+                const badges = this.selector.querySelectorAll('.badge[data-project]');
+                badges.forEach(b => {
+                    const proj = b.dataset.project;
+                    b.classList.toggle('active-project', proj === AppState.currentProject);
+                });
+            }
+            switchProject(name) {
+                if (!AppState.projects[name]) return;
+                AppState.currentProject = name;
+                saveState();
+                this.render();
+                Notifier.show(`Switched to project "${name}"`);
+                // Re-run audits if needed (could reload data)
+            }
+            newProject() {
+                const name = prompt('Enter new project name:');
+                if (!name || name.trim() === '') return;
+                const key = name.trim().replace(/\s+/g, '_').toLowerCase();
+                if (AppState.projects[key]) { Notifier.show('Project already exists.', 'warning'); return; }
+                AppState.projects[key] = {};
+                AppState.currentProject = key;
+                saveState();
+                // Add badge
+                const badge = document.createElement('span');
+                badge.className = 'badge';
+                badge.dataset.project = key;
+                badge.textContent = name;
+                this.selector.insertBefore(badge, document.getElementById('btnNewProject'));
+                this.render();
+                Notifier.show(`Project "${name}" created.`);
+            }
+            deleteProject() {
+                const current = AppState.currentProject;
+                if (current === 'default') { Notifier.show('Cannot delete default project.', 'error'); return; }
+                if (!confirm(`Delete project "${current}" and all its data?`)) return;
+                delete AppState.projects[current];
+                AppState.currentProject = 'default';
+                saveState();
+                this.render();
+                // Remove badge
+                const badge = this.selector.querySelector(`.badge[data-project="${current}"]`);
+                if (badge) badge.remove();
+                Notifier.show('Project deleted.');
+            }
+        }
+
+        /* ─── CONTENT ENGINE (with AI) ─── */
         class ContentEngine {
             constructor() {
                 this.input = document.getElementById('draftContent');
-                this.kw = document.getElementById('targetKeyword');
+                this.kw = document.getElementById('contentKeyword');
                 this.goal = document.getElementById('contentGoal');
+                this.aiOutput = document.getElementById('aiOutput');
                 this.bindEvents();
                 this.analyze();
+                document.getElementById('btnGenerateContent').addEventListener('click', () => this.generateContent());
+                document.getElementById('btnImproveContent').addEventListener('click', () => this.improveContent());
+                document.getElementById('btnSummarize').addEventListener('click', () => this.summarizeContent());
             }
             bindEvents() {
                 ['input', 'change'].forEach(evt => {
@@ -863,15 +1296,21 @@
                 const readability = this.fleschReadingEase(text);
                 const readEl = document.getElementById('readabilityScore');
                 readEl.innerText = readability !== null ? readability.toFixed(0) : '--';
-                readEl.style.color = readability !== null ? (readability > 60 ? 'var(--success-color)' : readability > 30 ? '#f9a825' : '#c62828') : 'var(--text)';
+                readEl.style.color = readability !== null ? (readability > 60 ? 'var(--success-color)' : readability > 30 ?
+                    '#f9a825' : '#c62828') : 'var(--text)';
                 const sentEl = document.getElementById('sentimentScore');
-                const positive = text.match(/\b(streamline|enhance|achieve|scalable|secure|robust|optimal|success|growth|innovate|leading|powerful|seamless)\b/gi);
-                const negative = text.match(/\b(challenge|complex|difficult|risk|failure|issue|problem|expensive|limited)\b/gi);
+                const positive = text.match(
+                    /\b(streamline|enhance|achieve|scalable|secure|robust|optimal|success|growth|innovate|leading|powerful|seamless)\b/gi
+                    );
+                const negative = text.match(
+                    /\b(challenge|complex|difficult|risk|failure|issue|problem|expensive|limited)\b/gi);
                 const pCount = positive ? positive.length : 0;
                 const nCount = negative ? negative.length : 0;
                 sentEl.innerText = pCount > nCount + 2 ? '😊' : nCount > pCount + 2 ? '😟' : '😐';
-                document.getElementById('dashReadability').innerText = readability !== null ? readability.toFixed(0) + '%' : '--';
-                document.getElementById('dashReadabilityBar').style.width = readability !== null ? Math.min(readability, 100) + '%' : '0%';
+                document.getElementById('dashReadability').innerText = readability !== null ? readability.toFixed(0) + '%' :
+                    '--';
+                document.getElementById('dashReadabilityBar').style.width = readability !== null ? Math.min(readability,
+                    100) + '%' : '0%';
                 document.getElementById('dashDensity').innerText = document.getElementById('kwDensity').innerText;
                 document.getElementById('dashDensityBar').style.width = document.getElementById('kwDensity').innerText;
                 const entities = text.match(/\b([A-Z][a-z]+(?:\s[A-Z][a-z]+)*)\b/g) || [];
@@ -880,7 +1319,9 @@
                 document.getElementById('dashEntities').innerText = richness + '%';
                 document.getElementById('dashEntitiesBar').style.width = richness + '%';
                 const container = document.getElementById('entityContainer');
-                container.innerHTML = entities.slice(0, 8).map(e => `<span class="entity-tag">${e}</span>`).join('') || '<span class="text-muted fs-7">No entities detected</span>';
+                container.innerHTML = entities.slice(0, 8).map(e =>
+                    `<span class="entity-tag">${e}</span>`
+                ).join('') || '<span class="text-muted fs-7">No entities detected</span>';
                 this.updateRecommendations(wCount, richness, readability);
             }
             fleschReadingEase(text) {
@@ -904,7 +1345,45 @@
                 if (richness < 50) recs.push('Add more named entities to improve semantic relevance');
                 if (readability !== null && readability < 50) recs.push('Simplify sentences to improve readability');
                 if (recs.length === 0) recs.push('Excellent — content is well optimized ✓');
-                list.innerHTML = recs.map(r => `<li class="d-flex gap-2 mb-2"><span class="material-icons-outlined ${recs.length === 1 ? 'text-success' : 'text-warning'}" style="font-size:1rem;">${recs.length === 1 ? 'check_circle' : 'lightbulb'}</span> ${r}</li>`).join('');
+                list.innerHTML = recs.map(r =>
+                    `<li class="d-flex gap-2 mb-2"><span class="material-icons-outlined ${recs.length === 1 ? 'text-success' : 'text-warning'}" style="font-size:1rem;">${recs.length === 1 ? 'check_circle' : 'lightbulb'}</span> ${r}</li>`
+                ).join('');
+            }
+            // AI-powered actions (simulated)
+            async generateContent() {
+                const kw = this.kw.value.trim();
+                if (!kw) { Notifier.show('Enter a target keyword.', 'warning'); return; }
+                this.aiOutput.style.display = 'block';
+                this.aiOutput.innerText = 'Generating content...';
+                // Simulate API call
+                await this.simulateAI('generate', kw);
+                this.aiOutput.innerText =
+                    `# ${kw.charAt(0).toUpperCase() + kw.slice(1)}: The Ultimate Guide\n\nModern ${kw} solutions are transforming how businesses operate. In this comprehensive guide, we'll explore the key benefits, implementation strategies, and future trends. From scalability to security, discover how ${kw} can drive your organization forward.`;
+                Notifier.show('Content generated successfully.');
+            }
+            async improveContent() {
+                const text = this.input.value;
+                if (!text) { Notifier.show('Draft content is empty.', 'warning'); return; }
+                this.aiOutput.style.display = 'block';
+                this.aiOutput.innerText = 'Improving content...';
+                await this.simulateAI('improve', text);
+                this.aiOutput.innerText =
+                    text.replace(/enterprise software/g, 'cutting-edge enterprise software').replace(/organizations/g,
+                        'global organizations');
+                Notifier.show('Content improved.');
+            }
+            async summarizeContent() {
+                const text = this.input.value;
+                if (!text) { Notifier.show('Draft content is empty.', 'warning'); return; }
+                this.aiOutput.style.display = 'block';
+                this.aiOutput.innerText = 'Summarizing...';
+                await this.simulateAI('summarize', text);
+                this.aiOutput.innerText =
+                    `Summary: ${text.split('.')[0]}. This content focuses on ${this.kw.value} and its role in business efficiency.`;
+                Notifier.show('Summary generated.');
+            }
+            simulateAI(action, data) {
+                return new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
             }
         }
 
@@ -914,11 +1393,19 @@
                 this.sel = document.getElementById('schemaType');
                 this.out = document.getElementById('schemaOutput');
                 this.templates = {
-                    Article: { "@context": "https://schema.org", "@type": "Article", "headline": "Enterprise Software Guide", "author": { "@type": "Organization", "name": "TechCorp" }, "datePublished": "2026-06-19" },
-                    FAQPage: { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{ "@type": "Question", "name": "What is enterprise software?", "acceptedAnswer": { "@type": "Answer", "text": "Enterprise software is a large-scale software solution designed for organizations." } }] },
-                    Organization: { "@context": "https://schema.org", "@type": "Organization", "name": "TechCorp", "url": "https://techcorp.com", "logo": "https://techcorp.com/logo.png" },
-                    Product: { "@context": "https://schema.org", "@type": "Product", "name": "Enterprise Suite v5", "brand": { "@type": "Brand", "name": "TechCorp" }, "offers": { "@type": "Offer", "price": "499.00", "priceCurrency": "USD" } },
-                    Event: { "@context": "https://schema.org", "@type": "Event", "name": "TechCorp Enterprise Summit", "startDate": "2026-07-15T09:00", "location": { "@type": "Place", "name": "San Francisco, CA" } }
+                    Article: { "@context": "https://schema.org", "@type": "Article",
+                    "headline": "Enterprise Software Guide", "author": { "@type": "Organization",
+                        "name": "TechCorp" }, "datePublished": "2026-06-19" },
+                    FAQPage: { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{ "@type": "Question",
+                            "name": "What is enterprise software?", "acceptedAnswer": { "@type": "Answer",
+                                "text": "Enterprise software is a large-scale software solution designed for organizations." } }] },
+                    Organization: { "@context": "https://schema.org", "@type": "Organization", "name": "TechCorp",
+                        "url": "https://techcorp.com", "logo": "https://techcorp.com/logo.png" },
+                    Product: { "@context": "https://schema.org", "@type": "Product", "name": "Enterprise Suite v5",
+                        "brand": { "@type": "Brand", "name": "TechCorp" }, "offers": { "@type": "Offer",
+                            "price": "499.00", "priceCurrency": "USD" } },
+                    Event: { "@context": "https://schema.org", "@type": "Event", "name": "TechCorp Enterprise Summit",
+                        "startDate": "2026-07-15T09:00", "location": { "@type": "Place", "name": "San Francisco, CA" } }
                 };
                 this.bindEvents();
                 this.generate();
@@ -936,7 +1423,9 @@
                 this.out.value = JSON.stringify(tpl, null, 2);
             }
             validate() {
-                try { const j = JSON.parse(this.out.value); if (!j["@context"] || !j["@type"]) throw new Error("Missing @context or @type"); Notifier.show('JSON-LD Validated ✓'); } catch (e) { Notifier.show(e.message, 'error'); }
+                try { const j = JSON.parse(this.out.value); if (!j["@context"] || !j["@type"]) throw new Error(
+                        "Missing @context or @type"); Notifier.show('JSON-LD Validated ✓'); } catch (e) { Notifier.show(e
+                        .message, 'error'); }
             }
         }
 
@@ -957,7 +1446,8 @@
                 this.tIn.addEventListener('input', () => this.update());
                 this.dIn.addEventListener('input', () => this.update());
                 this.richSelect.addEventListener('change', () => this.update());
-                document.querySelectorAll('input[name="serpView"]').forEach(el => el.addEventListener('change', () => this.update()));
+                document.querySelectorAll('input[name="serpView"]').forEach(el => el.addEventListener('change', () => this
+                    .update()));
             }
             update() {
                 let title = this.tIn.value;
@@ -972,9 +1462,12 @@
                 this.previewBox.classList.toggle('serp-mobile', isMobile);
                 const type = this.richSelect.value;
                 let html = '';
-                if (type === 'review') html = `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">⭐ 4.8 ★ (342 reviews)</span><span class="text-muted fs-8">Excellent</span></div>`;
-                else if (type === 'product') html = `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">💰 $499.00</span><span class="rich-badge">✓ In Stock</span></div>`;
-                else if (type === 'event') html = `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">📅 Jul 15, 2026</span><span class="rich-badge">📍 San Francisco</span></div>`;
+                if (type === 'review') html =
+                    `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">⭐ 4.8 ★ (342 reviews)</span><span class="text-muted fs-8">Excellent</span></div>`;
+                else if (type === 'product') html =
+                    `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">💰 $499.00</span><span class="rich-badge">✓ In Stock</span></div>`;
+                else if (type === 'event') html =
+                    `<div class="d-flex align-items-center gap-2 mt-2"><span class="rich-badge">📅 Jul 15, 2026</span><span class="rich-badge">📍 San Francisco</span></div>`;
                 this.richContainer.innerHTML = html;
             }
         }
@@ -983,16 +1476,20 @@
         class WebVitals {
             constructor() {
                 this.metrics = [
-                    { id: 'lcp', el: document.getElementById('lcpSlider'), val: document.getElementById('lcpValue'), badge: document.getElementById('lcpBadge'), unit: 's', good: 2.5, poor: 4.0 },
-                    { id: 'inp', el: document.getElementById('inpSlider'), val: document.getElementById('inpValue'), badge: document.getElementById('inpBadge'), unit: 'ms', good: 200, poor: 500 },
-                    { id: 'cls', el: document.getElementById('clsSlider'), val: document.getElementById('clsValue'), badge: document.getElementById('clsBadge'), unit: '', good: 0.1, poor: 0.25 }
+                    { id: 'lcp', el: document.getElementById('lcpSlider'), val: document.getElementById('lcpValue'),
+                        badge: document.getElementById('lcpBadge'), unit: 's', good: 2.5, poor: 4.0 },
+                    { id: 'inp', el: document.getElementById('inpSlider'), val: document.getElementById('inpValue'),
+                        badge: document.getElementById('inpBadge'), unit: 'ms', good: 200, poor: 500 },
+                    { id: 'cls', el: document.getElementById('clsSlider'), val: document.getElementById('clsValue'),
+                        badge: document.getElementById('clsBadge'), unit: '', good: 0.1, poor: 0.25 }
                 ];
                 this.bindEvents();
                 this.updatePageExperience();
             }
             bindEvents() {
                 this.metrics.forEach(m => {
-                    m.el.addEventListener('input', () => { this.evaluate(m); this.updatePageExperience(); });
+                    m.el.addEventListener('input', () => { this.evaluate(m);
+                        this.updatePageExperience(); });
                     this.evaluate(m);
                 });
             }
@@ -1000,9 +1497,11 @@
                 const val = parseFloat(m.el.value);
                 m.val.innerText = val + (m.unit ? ' ' + m.unit : '');
                 m.badge.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'text-dark', 'text-white');
-                if (val <= m.good) { m.badge.innerText = 'Good'; m.badge.classList.add('bg-success', 'text-white'); }
-                else if (val > m.poor) { m.badge.innerText = 'Poor'; m.badge.classList.add('bg-danger', 'text-white'); }
-                else { m.badge.innerText = 'Needs Improv.'; m.badge.classList.add('bg-warning', 'text-dark'); }
+                if (val <= m.good) { m.badge.innerText = 'Good';
+                    m.badge.classList.add('bg-success', 'text-white'); } else if (val > m.poor) { m.badge.innerText =
+                        'Poor';
+                    m.badge.classList.add('bg-danger', 'text-white'); } else { m.badge.innerText = 'Needs Improv.';
+                    m.badge.classList.add('bg-warning', 'text-dark'); }
             }
             updatePageExperience() {
                 const vals = this.metrics.map(m => parseFloat(m.el.value));
@@ -1017,7 +1516,8 @@
                 const el = document.getElementById('pageExpScore');
                 el.innerText = score;
                 el.className = 'score-ring ' + (score >= 80 ? 'bg-success' : score >= 50 ? 'bg-warning' : 'bg-danger');
-                document.getElementById('pageExpLabel').innerText = score >= 80 ? 'Excellent — passing all thresholds' : score >= 50 ? 'Moderate — some improvements needed' : 'Poor — urgent action required';
+                document.getElementById('pageExpLabel').innerText = score >= 80 ? 'Excellent — passing all thresholds' :
+                    score >= 50 ? 'Moderate — some improvements needed' : 'Poor — urgent action required';
             }
         }
 
@@ -1028,37 +1528,70 @@
             }
             export() {
                 const data = {
-                    grade: document.getElementById('overallGrade').innerText,
-                    score: document.getElementById('dashScore').innerText,
-                    keywords: document.getElementById('dashKeywords').innerText,
-                    backlinks: document.getElementById('dashBacklinks').innerText,
-                    readability: document.getElementById('dashReadability').innerText,
-                    density: document.getElementById('dashDensity').innerText,
-                    entities: document.getElementById('dashEntities').innerText,
-                    timestamp: new Date().toISOString()
+                    project: AppState.currentProject,
+                    timestamp: new Date().toISOString(),
+                    metrics: {
+                        traffic: document.getElementById('kpiTraffic').innerText,
+                        ctr: document.getElementById('kpiCtr').innerText,
+                        position: document.getElementById('kpiPosition').innerText,
+                        conversions: document.getElementById('kpiConversions').innerText,
+                    },
+                    content: {
+                        readability: document.getElementById('dashReadability').innerText,
+                        density: document.getElementById('dashDensity').innerText,
+                        entities: document.getElementById('dashEntities').innerText,
+                    }
                 };
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'seo-report-' + Date.now() + '.json';
+                a.download = 'marketing-report-' + Date.now() + '.json';
                 a.click();
                 URL.revokeObjectURL(url);
                 Notifier.show('Report exported as JSON');
             }
         }
 
-        /* ─── DASHBOARD UPDATER ─── */
-        class DashboardUpdater {
+        /* ─── DASHBOARD CHARTS ─── */
+        class DashboardCharts {
             constructor() {
-                setInterval(() => {
-                    const base = 80 + Math.floor(Math.random() * 15);
-                    document.getElementById('dashScore').innerText = base;
-                    const grade = base >= 90 ? 'A' : base >= 75 ? 'B+' : base >= 60 ? 'C' : 'D';
-                    const el = document.getElementById('overallGrade');
-                    el.innerText = grade;
-                    el.className = 'grade-circle grade-' + grade.charAt(0);
-                }, 8000);
+                this.initTrafficChart();
+                this.initKeywordPieChart();
+            }
+            initTrafficChart() {
+                const ctx = document.getElementById('trafficChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [{
+                            label: 'Organic Traffic',
+                            data: [4200, 4800, 5200, 5800],
+                            borderColor: '#0A58CA',
+                            backgroundColor: 'rgba(10,88,202,0.1)',
+                            tension: 0.3,
+                            fill: true,
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+            initKeywordPieChart() {
+                const ctx = document.getElementById('keywordPieChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Top 3', 'Positions 4-10', 'Positions 11-20', 'Beyond'],
+                        datasets: [{
+                            data: [35, 30, 20, 15],
+                            backgroundColor: ['#0A58CA', '#6EA8FE', '#B3D4FC', '#D1E7FF'],
+                            borderWidth: 0,
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom',
+                                labels: { boxWidth: 10, font: { size: 10 } } } } }
+                });
             }
         }
 
@@ -1070,7 +1603,6 @@
                 this.resultsDiv = document.getElementById('auditResults');
                 this.loadingDiv = document.getElementById('auditLoading');
                 this.btn.addEventListener('click', () => this.runAudit());
-                // Auto-run on load if URL has value
                 if (this.urlInput.value) setTimeout(() => this.runAudit(), 500);
             }
             async runAudit() {
@@ -1088,14 +1620,16 @@
                         html = await response.text();
                     } catch (e) {
                         Notifier.show('Could not fetch URL — using local draft content.', 'warning');
-                        html = document.getElementById('draftContent').value || '<html><body><h1>Enterprise Software</h1><p>Enterprise software solutions for business.</p></body></html>';
+                        html = document.getElementById('draftContent').value ||
+                            '<html><body><h1>Enterprise Software</h1><p>Enterprise software solutions for business.</p></body></html>';
                     }
                     const analysis = this.analyzeContent(html);
                     this.displayResults(analysis);
                     this.saveHistory(url, analysis);
                     this.resultsDiv.style.display = 'block';
-                } catch (err) { Notifier.show('Audit failed: ' + err.message, 'error'); }
-                finally { this.loadingDiv.style.display = 'none'; this.btn.disabled = false; }
+                } catch (err) { Notifier.show('Audit failed: ' + err.message, 'error'); } finally { this.loadingDiv.style
+                        .display = 'none';
+                    this.btn.disabled = false; }
             }
             analyzeContent(html) {
                 const tempDiv = document.createElement('div');
@@ -1106,17 +1640,25 @@
                 const hasHowTo = /howto|"@type":"howto"/i.test(html);
                 const hasQAPage = /qapage|"@type":"qapage"/i.test(html);
                 const schemaScore = (hasFAQ ? 40 : 0) + (hasHowTo ? 30 : 0) + (hasQAPage ? 30 : 0);
-                const questionPatterns = /\b(what|how|why|when|where|which|who|do|does|is|are|can|could|would|will)\s+\w+/gi;
+                const questionPatterns =
+                    /\b(what|how|why|when|where|which|who|do|does|is|are|can|could|would|will)\s+\w+/gi;
                 const questions = text.match(questionPatterns) || [];
                 const qaDensity = Math.min((questions.length / Math.max(text.split(/\s+/).length, 1)) * 100 * 5, 100);
                 const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
-                const avgSentenceLen = sentences.length > 0 ? sentences.reduce((sum, s) => sum + s.split(/\s+/).length, 0) / sentences.length : 20;
+                const avgSentenceLen = sentences.length > 0 ? sentences.reduce((sum, s) => sum + s.split(/\s+/).length,
+                    0) / sentences.length : 20;
                 const clarity = Math.max(0, 100 - (avgSentenceLen - 10) * 2);
                 const aeoScore = Math.round((schemaScore * 0.4) + (qaDensity * 0.3) + (clarity * 0.3));
                 const hasLocalBiz = /localbusiness|"@type":"localbusiness"/i.test(html);
                 const hasPlace = /place|"@type":"place"/i.test(html);
                 const localSchemaScore = (hasLocalBiz ? 60 : 0) + (hasPlace ? 40 : 0);
-                const locationWords = ['new york', 'london', 'paris', 'berlin', 'tokyo', 'sydney', 'san francisco', 'chicago', 'los angeles', 'toronto', 'vancouver', 'mexico city', 'singapore', 'hong kong', 'dubai', 'mumbai', 'bangkok', 'seoul', 'shanghai', 'beijing', 'delhi', 'jakarta', 'kuala lumpur', 'manila', 'moscow', 'rome', 'madrid', 'amsterdam', 'brussels', 'vienna', 'zurich', 'geneva', 'stockholm', 'oslo', 'helsinki', 'copenhagen', 'dublin', 'edinburgh', 'glasgow', 'birmingham', 'manchester', 'bristol', 'cardiff', 'belfast', 'liverpool', 'leeds', 'sheffield', 'newcastle'];
+                const locationWords = ['new york', 'london', 'paris', 'berlin', 'tokyo', 'sydney', 'san francisco',
+                    'chicago', 'los angeles', 'toronto', 'vancouver', 'mexico city', 'singapore', 'hong kong',
+                    'dubai', 'mumbai', 'bangkok', 'seoul', 'shanghai', 'beijing', 'delhi', 'jakarta', 'kuala lumpur',
+                    'manila', 'moscow', 'rome', 'madrid', 'amsterdam', 'brussels', 'vienna', 'zurich', 'geneva',
+                    'stockholm', 'oslo', 'helsinki', 'copenhagen', 'dublin', 'edinburgh', 'glasgow', 'birmingham',
+                    'manchester', 'bristol', 'cardiff', 'belfast', 'liverpool', 'leeds', 'sheffield', 'newcastle'
+                ];
                 let locCount = 0;
                 const words = text.split(/\s+/);
                 const totalWords = words.length;
@@ -1125,7 +1667,9 @@
                     if (locationWords.some(loc => clean.includes(loc))) locCount++;
                 }
                 const locDensity = Math.min((locCount / Math.max(totalWords, 1)) * 200, 100);
-                const countries = ['usa', 'us', 'united states', 'canada', 'uk', 'united kingdom', 'germany', 'france', 'japan', 'australia', 'china', 'india', 'brazil', 'mexico', 'south korea', 'italy', 'spain'];
+                const countries = ['usa', 'us', 'united states', 'canada', 'uk', 'united kingdom', 'germany', 'france',
+                    'japan', 'australia', 'china', 'india', 'brazil', 'mexico', 'south korea', 'italy', 'spain'
+                ];
                 let regionCount = 0;
                 for (const c of countries) if (lower.includes(c)) regionCount++;
                 const regionScore = Math.min(regionCount * 15, 100);
@@ -1147,7 +1691,8 @@
                 }
                 if (regionScore < 30) insights.push('Mention specific countries or regions to strengthen geographical relevance.');
                 if (insights.length === 0) insights.push('Excellent AEO and GEO optimization — all metrics are well balanced.');
-                return { aeo: aeoScore, geo: geoScore, grade, schemaScore, qaDensity, clarity, localSchemaScore, locDensity, regionScore, insights };
+                return { aeo: aeoScore, geo: geoScore, grade, schemaScore, qaDensity, clarity, localSchemaScore,
+                    locDensity, regionScore, insights };
             }
             displayResults(data) {
                 document.getElementById('aeoScore').innerText = data.aeo;
@@ -1164,51 +1709,20 @@
                 document.getElementById('geoLocDensity').innerText = data.locDensity.toFixed(0) + '%';
                 document.getElementById('geoRegionScore').innerText = data.regionScore + '%';
                 const insightsContainer = document.getElementById('auditInsights');
-                insightsContainer.innerHTML = data.insights.map(ins => `<div class="audit-insight"><span class="material-icons-outlined">lightbulb</span> ${ins}</div>`).join('');
+                insightsContainer.innerHTML = data.insights.map(ins =>
+                    `<div class="audit-insight"><span class="material-icons-outlined">lightbulb</span> ${ins}</div>`
+                ).join('');
             }
             saveHistory(url, data) {
                 const history = JSON.parse(localStorage.getItem('auditHistory') || '[]');
                 history.unshift({ url, date: new Date().toISOString(), aeo: data.aeo, geo: data.geo, grade: data.grade });
                 if (history.length > 50) history.pop();
                 localStorage.setItem('auditHistory', JSON.stringify(history));
-                this.renderHistory();
-            }
-            renderHistory() {
-                const container = document.getElementById('historyContainer');
-                const history = JSON.parse(localStorage.getItem('auditHistory') || '[]');
-                if (!history.length) { container.innerHTML = '<div class="history-empty">No audits saved yet.</div>'; return; }
-                container.innerHTML = history.map((h, i) => `
-                    <div class="history-item" data-index="${i}">
-                        <div><span class="fw-semibold">${h.url}</span><br><span class="fs-7 text-muted">${new Date(h.date).toLocaleString()}</span></div>
-                        <div><span class="badge bg-primary">AEO ${h.aeo}</span> <span class="badge bg-success">GEO ${h.geo}</span> <span class="badge bg-secondary">${h.grade}</span></div>
-                    </div>
-                `).join('');
-                container.querySelectorAll('.history-item').forEach(el => {
-                    el.addEventListener('click', function() {
-                        const idx = parseInt(this.dataset.index);
-                        const h = history[idx];
-                        document.getElementById('auditUrl').value = h.url;
-                        // Simulate re-run
-                        Notifier.show('Loading audit from history...', 'info');
-                        setTimeout(() => {
-                            document.getElementById('aeoScore').innerText = h.aeo;
-                            document.getElementById('aeoBar').style.width = h.aeo + '%';
-                            document.getElementById('geoScore').innerText = h.geo;
-                            document.getElementById('geoBar').style.width = h.geo + '%';
-                            const gradeEl = document.getElementById('auditGrade');
-                            gradeEl.innerText = h.grade;
-                            gradeEl.className = 'grade-circle grade-' + h.grade.charAt(0);
-                            document.getElementById('auditResults').style.display = 'block';
-                            // Switch to audit tab
-                            const auditTab = document.querySelector('[data-bs-target="#mod-audit"]');
-                            if (auditTab) auditTab.click();
-                        }, 300);
-                    });
-                });
+                window.historyManager.render();
             }
         }
 
-        /* ─── TECHNICAL SEO AUDITOR ─── */
+        /* ─── TECHNICAL AUDITOR ─── */
         class TechnicalAuditor {
             constructor() {
                 this.btn = document.getElementById('btnRunTech');
@@ -1231,13 +1745,15 @@
                         html = await response.text();
                     } catch (e) {
                         Notifier.show('Could not fetch URL — using local draft content.', 'warning');
-                        html = document.getElementById('draftContent').value || '<html><head><title>Enterprise Software</title></head><body><h1>Enterprise Software</h1><p>Content</p></body></html>';
+                        html = document.getElementById('draftContent').value ||
+                            '<html><head><title>Enterprise Software</title></head><body><h1>Enterprise Software</h1><p>Content</p></body></html>';
                     }
                     const analysis = this.analyzeTechnical(html);
                     this.displayTechResults(analysis);
                     this.resultsDiv.style.display = 'block';
-                } catch (err) { Notifier.show('Tech audit failed: ' + err.message, 'error'); }
-                finally { this.loadingDiv.style.display = 'none'; this.btn.disabled = false; }
+                } catch (err) { Notifier.show('Tech audit failed: ' + err.message, 'error'); } finally { this.loadingDiv
+                        .style.display = 'none';
+                    this.btn.disabled = false; }
             }
             analyzeTechnical(html) {
                 const tempDiv = document.createElement('div');
@@ -1250,11 +1766,16 @@
                 const h2s = doc.querySelectorAll('h2').length;
                 const images = doc.querySelectorAll('img');
                 const imgWithAlt = doc.querySelectorAll('img[alt]:not([alt=""])').length;
-                const internalLinks = doc.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"], a[href^="#"]').length;
-                const externalLinks = doc.querySelectorAll('a[href^="http"]:not([href*="' + new URL(document.getElementById('auditUrl').value).hostname + '"])').length;
+                const internalLinks = doc.querySelectorAll('a[href^="/"], a[href^="./"], a[href^="../"], a[href^="#"]')
+                    .length;
+                const externalLinks = doc.querySelectorAll(
+                    'a[href^="http"]:not([href*="' + new URL(document.getElementById('auditUrl').value).hostname + '"])')
+                    .length;
                 const robots = doc.querySelector('meta[name="robots"]')?.getAttribute('content') || '—';
-                const sitemap = doc.querySelector('link[rel="sitemap"]')?.getAttribute('href') || (doc.querySelector('a[href*="sitemap"]')?.getAttribute('href') || '—');
-                let errors = 0, warnings = 0;
+                const sitemap = doc.querySelector('link[rel="sitemap"]')?.getAttribute('href') || (doc.querySelector(
+                    'a[href*="sitemap"]')?.getAttribute('href') || '—');
+                let errors = 0,
+                    warnings = 0;
                 if (!metaTitle || metaTitle === '—') errors++;
                 if (!metaDesc || metaDesc === '—') errors++;
                 if (!canonical || canonical === '—') warnings++;
@@ -1268,7 +1789,8 @@
                 if (errors > 0) insights.push('Fix critical issues: missing meta title/description or H1.');
                 if (warnings > 0) insights.push('Address warnings: canonical, image alt texts, internal links.');
                 if (techScore >= 80) insights.push('Technical SEO is strong — keep up the good work.');
-                return { metaTitle, metaDesc, canonical, h1s, h2s, imgWithAlt, imgTotal: images.length, internalLinks, externalLinks, robots, sitemap, errors, warnings, techScore, insights };
+                return { metaTitle, metaDesc, canonical, h1s, h2s, imgWithAlt, imgTotal: images.length, internalLinks,
+                    externalLinks, robots, sitemap, errors, warnings, techScore, insights };
             }
             displayTechResults(data) {
                 document.getElementById('techScore').innerText = data.techScore;
@@ -1286,7 +1808,9 @@
                 document.getElementById('techRobots').innerText = data.robots;
                 document.getElementById('techSitemap').innerText = data.sitemap;
                 const insightsContainer = document.getElementById('techInsights');
-                insightsContainer.innerHTML = data.insights.map(ins => `<div class="audit-insight"><span class="material-icons-outlined">info</span> ${ins}</div>`).join('');
+                insightsContainer.innerHTML = data.insights.map(ins =>
+                    `<div class="audit-insight"><span class="material-icons-outlined">info</span> ${ins}</div>`
+                ).join('');
             }
         }
 
@@ -1306,12 +1830,12 @@
                 this.resultsDiv.style.display = 'none';
                 this.btn.disabled = true;
                 try {
-                    // Simulated keyword data
                     const keywords = this.generateKeywords(seed);
                     this.displayKeywords(keywords);
                     this.resultsDiv.style.display = 'block';
-                } catch (err) { Notifier.show('Keyword research failed: ' + err.message, 'error'); }
-                finally { this.loadingDiv.style.display = 'none'; this.btn.disabled = false; }
+                } catch (err) { Notifier.show('Keyword research failed: ' + err.message, 'error'); } finally { this
+                        .loadingDiv.style.display = 'none';
+                    this.btn.disabled = false; }
             }
             generateKeywords(seed) {
                 const variants = [
@@ -1324,8 +1848,8 @@
                     { kw: seed + ' benefits', vol: 380, diff: 40, cpc: 2.9 },
                     { kw: seed + ' implementation', vol: 290, diff: 35, cpc: 7.3 },
                 ];
-                // Add some random variation
-                return variants.map(v => ({ ...v, vol: v.vol + Math.floor(Math.random() * 200 - 100), diff: Math.min(100, Math.max(10, v.diff + Math.floor(Math.random() * 20 - 10))) }));
+                return variants.map(v => ({ ...v, vol: v.vol + Math.floor(Math.random() * 200 - 100), diff: Math.min(
+                        100, Math.max(10, v.diff + Math.floor(Math.random() * 20 - 10))) }));
             }
             displayKeywords(keywords) {
                 const table = document.getElementById('keywordTable');
@@ -1340,7 +1864,6 @@
                         </div>
                     `).join('')}
                 `;
-                // People Also Ask
                 const paaContainer = document.getElementById('paaContainer');
                 const questions = [
                     `What is ${this.input.value.trim()}?`,
@@ -1350,11 +1873,141 @@
                     `Is ${this.input.value.trim()} worth it?`,
                     `How to implement ${this.input.value.trim()}?`
                 ];
-                paaContainer.innerHTML = questions.map(q => `<div class="audit-insight" style="margin-bottom:6px;"><span class="material-icons-outlined">help</span> ${q}</div>`).join('');
+                paaContainer.innerHTML = questions.map(q =>
+                    `<div class="audit-insight" style="margin-bottom:6px;"><span class="material-icons-outlined">help</span> ${q}</div>`
+                ).join('');
             }
         }
 
-        /* ─── HISTORY RENDER ─── */
+        /* ─── COMPETITOR GAP ─── */
+        class CompetitorGap {
+            constructor() {
+                this.btn = document.getElementById('btnRunGap');
+                this.btn.addEventListener('click', () => this.runGap());
+            }
+            runGap() {
+                const yourDomain = document.getElementById('yourDomain').value.trim();
+                const comps = document.getElementById('competitorDomains').value.split(',').map(s => s.trim()).filter(Boolean);
+                if (!yourDomain || comps.length === 0) { Notifier.show('Enter your domain and at least one competitor.',
+                        'warning'); return; }
+                // Simulate gap analysis
+                const keywords = ['enterprise software', 'cloud solutions', 'data security', 'scalability', 'AI integration',
+                    'workflow automation', 'IT governance', 'digital transformation'
+                ];
+                const gaps = [];
+                const yourKeywords = keywords.slice(0, 4);
+                const compKeywords = keywords;
+                const missing = compKeywords.filter(k => !yourKeywords.includes(k));
+                const opportunities = missing.slice(0, 3);
+                const contentGaps = ['Case studies', 'API documentation', 'Pricing page', 'Customer success stories'];
+                document.getElementById('gapKeywords').innerText = missing.length;
+                document.getElementById('gapContent').innerText = contentGaps.length;
+                document.getElementById('gapOpp').innerText = opportunities.length;
+                const table = document.getElementById('gapTable');
+                table.innerHTML = `
+                    <div class="gap-row header"><span>Keyword</span><span>Your Rank</span><span>Competitor Avg</span><span>Opportunity</span></div>
+                    ${missing.slice(0, 6).map(k => `
+                        <div class="gap-row">
+                            <span>${k}</span>
+                            <span>—</span>
+                            <span>#${3 + Math.floor(Math.random() * 8)}</span>
+                            <span class="badge bg-success">High</span>
+                        </div>
+                    `).join('')}
+                `;
+                document.getElementById('gapResults').style.display = 'block';
+                Notifier.show('Gap analysis complete.');
+            }
+        }
+
+        /* ─── BACKLINK ANALYZER ─── */
+        class BacklinkAnalyzer {
+            constructor() {
+                this.btn = document.getElementById('btnRunBacklinks');
+                this.btn.addEventListener('click', () => this.runBacklinks());
+            }
+            runBacklinks() {
+                const domain = document.getElementById('backlinkDomain').value.trim();
+                if (!domain) { Notifier.show('Enter a domain.', 'warning'); return; }
+                // Simulate backlink data
+                const total = 1200 + Math.floor(Math.random() * 800);
+                const domains = 340 + Math.floor(Math.random() * 200);
+                const authority = 70 + Math.floor(Math.random() * 20);
+                const spam = 5 + Math.floor(Math.random() * 15);
+                document.getElementById('blTotal').innerText = total;
+                document.getElementById('blDomains').innerText = domains;
+                document.getElementById('blAuthority').innerText = authority;
+                document.getElementById('blSpam').innerText = spam + '%';
+                const topDomains = ['techblog.com', 'softwareweekly.io', 'enterpriseinsider.net', 'cloudmag.com',
+                    'nextgen.org'
+                ];
+                const table = document.getElementById('blTable');
+                table.innerHTML = topDomains.map(d =>
+                    `<div class="backlink-item"><span>${d}</span><span class="badge bg-primary">${80 + Math.floor(Math.random()*20)} DA</span></div>`
+                ).join('');
+                document.getElementById('backlinkResults').style.display = 'block';
+                Notifier.show('Backlink analysis complete.');
+            }
+        }
+
+        /* ─── TRENDS ─── */
+        class TrendAnalyzer {
+            constructor() {
+                this.btn = document.getElementById('btnTrendAnalysis');
+                this.btn.addEventListener('click', () => this.runTrends());
+                this.chart = null;
+            }
+            runTrends() {
+                const topic = document.getElementById('trendTopic').value.trim();
+                if (!topic) { Notifier.show('Enter a topic.', 'warning'); return; }
+                document.getElementById('trendLoading').style.display = 'block';
+                document.getElementById('trendResults').style.display = 'none';
+                this.btn.disabled = true;
+                setTimeout(() => {
+                    document.getElementById('trendLoading').style.display = 'none';
+                    document.getElementById('trendResults').style.display = 'block';
+                    this.btn.disabled = false;
+                    // Render chart
+                    const ctx = document.getElementById('trendChart').getContext('2d');
+                    if (this.chart) this.chart.destroy();
+                    this.chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
+                                'Dec'
+                            ],
+                            datasets: [{
+                                label: 'Search Volume',
+                                data: [1200, 1350, 1400, 1600, 1550, 1700, 1800, 1900, 2100, 2300, 2500,
+                                    2700
+                                ],
+                                borderColor: '#0A58CA',
+                                backgroundColor: 'rgba(10,88,202,0.1)',
+                                tension: 0.3,
+                                fill: true,
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                    });
+                    // Emerging topics
+                    const emerging = ['AI-driven ' + topic, 'Sustainable ' + topic, 'Mobile-first ' + topic,
+                        'Serverless ' + topic
+                    ];
+                    document.getElementById('emergingTopics').innerHTML = emerging.map(t =>
+                        `<span class="chip">${t}</span>`
+                    ).join('');
+                    // Seasonality insights
+                    document.getElementById('seasonalityInsights').innerHTML = `
+                        <div class="audit-insight"><span class="material-icons-outlined">info</span> Peak months: September–November (back-to-school)</div>
+                        <div class="audit-insight"><span class="material-icons-outlined">info</span> Lowest interest: December–January (holiday slowdown)</div>
+                        <div class="audit-insight"><span class="material-icons-outlined">info</span> Steady growth of 8% YoY in Q3.</div>
+                    `;
+                    Notifier.show('Trend analysis complete.');
+                }, 800);
+            }
+        }
+
+        /* ─── HISTORY MANAGER ─── */
         class HistoryManager {
             constructor() {
                 this.render();
@@ -1397,22 +2050,49 @@
             }
         }
 
+        /* ─── SETTINGS (API Keys) ─── */
+        class Settings {
+            constructor() {
+                document.getElementById('openaiKey').value = AppState.apiKeys.openai || '';
+                document.getElementById('gscKey').value = AppState.apiKeys.gsc || '';
+                document.getElementById('btnSaveKeys').addEventListener('click', () => {
+                    AppState.apiKeys.openai = document.getElementById('openaiKey').value;
+                    AppState.apiKeys.gsc = document.getElementById('gscKey').value;
+                    saveState();
+                    Notifier.show('API keys saved securely.');
+                });
+            }
+        }
+
         /* ─── INIT ─── */
         document.addEventListener('DOMContentLoaded', () => {
             new ThemeManager();
+            const projectManager = new ProjectManager();
             new ContentEngine();
             new SchemaArchitect();
             new SerpPreview();
             new WebVitals();
             new ReportExporter();
-            new DashboardUpdater();
+            new DashboardCharts();
             const auditor = new AeoGeoAuditor();
             new TechnicalAuditor();
             new KeywordResearch();
-            new HistoryManager();
-            // Make auditor's renderHistory available to HistoryManager
-            window.auditor = auditor;
-            document.getElementById('btnApplyConfig').addEventListener('click', () => Notifier.show('Configuration applied.'));
+            new CompetitorGap();
+            new BacklinkAnalyzer();
+            new TrendAnalyzer();
+            const historyManager = new HistoryManager();
+            // Make history manager globally accessible for auditor
+            window.historyManager = historyManager;
+            new Settings();
+
+            // Simulate KPI updates
+            setInterval(() => {
+                const traffic = 10000 + Math.floor(Math.random() * 5000);
+                document.getElementById('kpiTraffic').innerText = (traffic / 1000).toFixed(1) + 'k';
+                document.getElementById('kpiCtr').innerText = (3 + Math.random() * 3).toFixed(1) + '%';
+                document.getElementById('kpiPosition').innerText = (10 + Math.random() * 8).toFixed(1);
+                document.getElementById('kpiConversions').innerText = 300 + Math.floor(Math.random() * 200);
+            }, 10000);
         });
     </script>
 
