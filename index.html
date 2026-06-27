@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Enterprise Marketing Command Center — v5.0</title>
+    <title>Marketing Command Center — v6.0 (Enterprise)</title>
 
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
-    <!-- Chart.js for advanced visualizations -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
     <style>
-        /* ─── ROOT ─── */
+        /* ─── ROOT VARIABLES ─── */
         :root {
             --primary: #0A58CA;
             --primary-dark: #052C65;
@@ -26,7 +26,7 @@
             --danger-bg: #F8D7DA;
             --text: #212529;
             --text-muted: #6C757D;
-            --bg-glass: rgba(255, 255, 255, 0.82);
+            --bg-glass: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.5);
             --glass-shadow: 0 16px 48px rgba(10, 88, 202, 0.07);
             --card-bg: #ffffff;
@@ -38,6 +38,7 @@
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
             --radius: 14px;
             --transition: 0.3s ease;
+            --font-family: 'Inter', sans-serif;
         }
 
         [data-theme="dark"] {
@@ -57,13 +58,12 @@
             --serp-bg: #1E252E;
         }
 
+        /* ─── RESET & GLOBAL ─── */
         *,
         *::before,
-        *::after {
-            box-sizing: border-box;
-        }
+        *::after { box-sizing: border-box; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-family);
             background: linear-gradient(145deg, var(--body-bg-start) 0%, var(--body-bg-end) 100%);
             color: var(--text);
             min-height: 100vh;
@@ -73,6 +73,7 @@
             transition: background 0.4s ease, color 0.3s ease;
         }
 
+        /* Animated background */
         .bg-shape {
             position: fixed;
             border-radius: 50%;
@@ -81,38 +82,16 @@
             animation: drift 22s infinite alternate ease-in-out;
             pointer-events: none;
         }
-        .shape-1 {
-            width: 60vw;
-            height: 60vw;
-            background: var(--primary-light);
-            top: -20%;
-            left: -10%;
-            opacity: 0.5;
-        }
-        .shape-2 {
-            width: 50vw;
-            height: 50vw;
-            background: #e0cffc;
-            bottom: -20%;
-            right: -10%;
-            animation-delay: -11s;
-            opacity: 0.4;
-        }
-        [data-theme="dark"] .shape-1 {
-            opacity: 0.15;
-        }
-        [data-theme="dark"] .shape-2 {
-            opacity: 0.1;
-        }
+        .shape-1 { width: 60vw; height: 60vw; background: var(--primary-light); top: -20%; left: -10%; opacity: 0.5; }
+        .shape-2 { width: 50vw; height: 50vw; background: #e0cffc; bottom: -20%; right: -10%; animation-delay: -11s; opacity: 0.4; }
+        [data-theme="dark"] .shape-1 { opacity: 0.15; }
+        [data-theme="dark"] .shape-2 { opacity: 0.1; }
         @keyframes drift {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                transform: translate(6%, 6%) scale(1.05);
-            }
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(6%, 6%) scale(1.05); }
         }
 
+        /* ─── GLASS PANEL ─── */
         .glass-panel {
             background: var(--bg-glass);
             backdrop-filter: blur(24px);
@@ -128,34 +107,24 @@
         .glass-panel::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
+            top: 0; left: 0; right: 0; height: 4px;
             background: linear-gradient(90deg, var(--primary), #6ea8fe, var(--primary));
             background-size: 200% 100%;
             animation: shimmer 4s infinite linear;
         }
         @keyframes shimmer {
-            0% {
-                background-position: 0% 0%;
-            }
-            100% {
-                background-position: 200% 0%;
-            }
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
         }
 
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
+        /* ─── TYPOGRAPHY ─── */
+        h1, h2, h3, h4, h5, h6 {
             font-weight: 600;
             color: var(--text);
             letter-spacing: -0.3px;
         }
 
+        /* ─── NAV PILLS ─── */
         .nav-pills .nav-link {
             color: var(--text-muted);
             border-radius: 12px;
@@ -179,12 +148,10 @@
             color: #fff;
             box-shadow: 0 4px 16px rgba(10, 88, 202, 0.25);
         }
-        .nav-pills .nav-link .material-icons-outlined {
-            font-size: 1.3rem;
-        }
+        .nav-pills .nav-link .material-icons-outlined { font-size: 1.3rem; }
 
-        .form-control,
-        .form-select {
+        /* ─── FORM ELEMENTS ─── */
+        .form-control, .form-select {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text);
@@ -193,12 +160,12 @@
             font-size: 0.95rem;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-control:focus,
-        .form-select:focus {
+        .form-control:focus, .form-select:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(10, 88, 202, 0.12);
         }
 
+        /* ─── BUTTONS ─── */
         .btn-primary-custom {
             background: var(--primary);
             border: none;
@@ -235,6 +202,7 @@
             color: var(--primary);
         }
 
+        /* ─── METRIC CARDS ─── */
         .metric-card {
             background: var(--card-bg);
             border-radius: var(--radius);
@@ -263,6 +231,7 @@
             margin-top: 6px;
         }
 
+        /* ─── SERP PREVIEW ─── */
         .serp-preview-box {
             background: var(--serp-bg);
             border-radius: var(--radius);
@@ -271,50 +240,21 @@
             font-family: arial, sans-serif;
             transition: background 0.3s ease;
         }
-        .serp-url {
-            color: #202124;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        [data-theme="dark"] .serp-url {
-            color: #bdc1c6;
-        }
-        .serp-title {
-            color: #1a0dab;
-            font-size: 20px;
-            font-weight: 400;
-            cursor: default;
-        }
-        [data-theme="dark"] .serp-title {
-            color: #8ab4f8;
-        }
-        .serp-desc {
-            color: #4d5156;
-            font-size: 14px;
-            line-height: 1.58;
-        }
-        [data-theme="dark"] .serp-desc {
-            color: #bdc1c6;
-        }
-        .serp-mobile .serp-title {
-            font-size: 16px;
-        }
-        .serp-mobile .serp-desc {
-            font-size: 13px;
-        }
+        .serp-url { color: #202124; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        [data-theme="dark"] .serp-url { color: #bdc1c6; }
+        .serp-title { color: #1a0dab; font-size: 20px; font-weight: 400; cursor: default; }
+        [data-theme="dark"] .serp-title { color: #8ab4f8; }
+        .serp-desc { color: #4d5156; font-size: 14px; line-height: 1.58; }
+        [data-theme="dark"] .serp-desc { color: #bdc1c6; }
+        .serp-mobile .serp-title { font-size: 16px; }
+        .serp-mobile .serp-desc { font-size: 13px; }
 
-        .cwv-badge {
-            font-size: 0.75rem;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
+        /* ─── CWV BADGES ─── */
+        .cwv-badge { font-size: 0.75rem; padding: 3px 12px; border-radius: 20px; font-weight: 600; }
 
+        /* ─── GRADE CIRCLE ─── */
         .grade-circle {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -323,28 +263,18 @@
             font-weight: 800;
             color: #fff;
             margin: 0 auto 0.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-        .grade-A {
-            background: linear-gradient(135deg, #2e7d32, #43a047);
-        }
-        .grade-B {
-            background: linear-gradient(135deg, #2e7d32, #66bb6a);
-        }
-        .grade-C {
-            background: linear-gradient(135deg, #f9a825, #fbc02d);
-        }
-        .grade-D {
-            background: linear-gradient(135deg, #ef6c00, #fb8c00);
-        }
-        .grade-F {
-            background: linear-gradient(135deg, #c62828, #e53935);
-        }
+        .grade-A { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .grade-B { background: linear-gradient(135deg, #2e7d32, #66bb6a); }
+        .grade-C { background: linear-gradient(135deg, #f9a825, #fbc02d); }
+        .grade-D { background: linear-gradient(135deg, #ef6c00, #fb8c00); }
+        .grade-F { background: linear-gradient(135deg, #c62828, #e53935); }
 
+        /* ─── TOAST ─── */
         .toast-container {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 24px; right: 24px;
             z-index: 1060;
             display: flex;
             flex-direction: column;
@@ -355,7 +285,7 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
             padding: 14px 20px;
             display: flex;
             align-items: center;
@@ -363,50 +293,25 @@
             animation: slideUp 0.3s ease;
             color: var(--text);
         }
-        .toast-custom.success {
-            border-left: 4px solid #2e7d32;
-        }
-        .toast-custom.error {
-            border-left: 4px solid #c62828;
-        }
-        .toast-custom.warning {
-            border-left: 4px solid #f9a825;
-        }
+        .toast-custom.success { border-left: 4px solid #2e7d32; }
+        .toast-custom.error { border-left: 4px solid #c62828; }
+        .toast-custom.warning { border-left: 4px solid #f9a825; }
         @keyframes slideUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        .fs-7 {
-            font-size: 0.8rem;
-        }
-        .fs-8 {
-            font-size: 0.7rem;
-        }
-        .border-end-md {
-            border-right: 1px solid var(--border-color);
-        }
+        /* ─── UTILITY CLASSES ─── */
+        .fs-7 { font-size: 0.8rem; }
+        .fs-8 { font-size: 0.7rem; }
+        .border-end-md { border-right: 1px solid var(--border-color); }
         @media (max-width: 768px) {
-            .border-end-md {
-                border-right: none;
-            }
-            .glass-panel {
-                padding: 1.5rem;
-                border-radius: 1.5rem;
-            }
-            .grade-circle {
-                width: 60px;
-                height: 60px;
-                font-size: 1.8rem;
-            }
+            .border-end-md { border-right: none; }
+            .glass-panel { padding: 1.5rem; border-radius: 1.5rem; }
+            .grade-circle { width: 60px; height: 60px; font-size: 1.8rem; }
         }
 
+        /* ─── THEME TOGGLE ─── */
         .theme-toggle {
             cursor: pointer;
             padding: 0.4rem 0.8rem;
@@ -420,10 +325,9 @@
             transition: all 0.3s ease;
             font-size: 0.85rem;
         }
-        .theme-toggle:hover {
-            border-color: var(--primary);
-        }
+        .theme-toggle:hover { border-color: var(--primary); }
 
+        /* ─── COMPETITOR TABLE ─── */
         .competitor-row {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr;
@@ -455,28 +359,12 @@
             transition: all 0.2s ease;
             cursor: default;
         }
-        .chip:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-        [data-theme="dark"] .chip {
-            background: #1A2A3A;
-            color: #8ab4f8;
-        }
-        [data-theme="dark"] .chip:hover {
-            background: #2A4A6A;
-            color: #fff;
-        }
+        .chip:hover { background: var(--primary); color: #fff; }
+        [data-theme="dark"] .chip { background: #1A2A3A; color: #8ab4f8; }
+        [data-theme="dark"] .chip:hover { background: #2A4A6A; color: #fff; }
 
-        .progress-thin {
-            height: 6px;
-            border-radius: 10px;
-            background: var(--border-color);
-        }
-        .progress-thin .progress-bar {
-            border-radius: 10px;
-            transition: width 0.4s ease;
-        }
+        .progress-thin { height: 6px; border-radius: 10px; background: var(--border-color); }
+        .progress-thin .progress-bar { border-radius: 10px; transition: width 0.4s ease; }
 
         .entity-tag {
             display: inline-block;
@@ -488,14 +376,10 @@
             color: var(--primary);
             margin: 2px 4px 2px 0;
         }
-        [data-theme="dark"] .entity-tag {
-            background: #1A2A3A;
-            color: #8ab4f8;
-        }
+        [data-theme="dark"] .entity-tag { background: #1A2A3A; color: #8ab4f8; }
 
         .score-ring {
-            width: 56px;
-            height: 56px;
+            width: 56px; height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -508,29 +392,17 @@
 
         .pulse-dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             border-radius: 50%;
             background: #2e7d32;
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
         }
 
-        .audit-score-big {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
+        .audit-score-big { font-size: 3rem; font-weight: 800; color: var(--primary); }
         .audit-detail-item {
             display: flex;
             justify-content: space-between;
@@ -538,9 +410,7 @@
             border-bottom: 1px solid var(--border-color);
             font-size: 0.9rem;
         }
-        .audit-detail-item:last-child {
-            border-bottom: none;
-        }
+        .audit-detail-item:last-child { border-bottom: none; }
         .audit-insight {
             padding: 10px 14px;
             border-radius: 10px;
@@ -552,10 +422,7 @@
             align-items: flex-start;
             gap: 8px;
         }
-        [data-theme="dark"] .audit-insight {
-            background: #1A2A3A;
-            color: #8ab4f8;
-        }
+        [data-theme="dark"] .audit-insight { background: #1A2A3A; color: #8ab4f8; }
 
         .history-item {
             display: flex;
@@ -567,17 +434,9 @@
             transition: background 0.2s ease;
             border-radius: 8px;
         }
-        .history-item:hover {
-            background: var(--primary-light);
-        }
-        .history-item .badge {
-            font-size: 0.7rem;
-        }
-        .history-empty {
-            color: var(--text-muted);
-            text-align: center;
-            padding: 2rem 0;
-        }
+        .history-item:hover { background: var(--primary-light); }
+        .history-item .badge { font-size: 0.7rem; }
+        .history-empty { color: var(--text-muted); text-align: center; padding: 2rem 0; }
 
         .tech-tag {
             display: inline-block;
@@ -586,18 +445,9 @@
             font-size: 0.7rem;
             font-weight: 600;
         }
-        .tech-tag.success {
-            background: var(--success-bg);
-            color: var(--success);
-        }
-        .tech-tag.warning {
-            background: var(--warning-bg);
-            color: var(--warning);
-        }
-        .tech-tag.danger {
-            background: var(--danger-bg);
-            color: var(--danger);
-        }
+        .tech-tag.success { background: var(--success-bg); color: var(--success); }
+        .tech-tag.warning { background: var(--warning-bg); color: var(--warning); }
+        .tech-tag.danger { background: var(--danger-bg); color: var(--danger); }
 
         .rich-badge {
             display: inline-flex;
@@ -611,25 +461,11 @@
             font-weight: 600;
             letter-spacing: 0.3px;
         }
-        [data-theme="dark"] .rich-badge {
-            background: #1A2A3A;
-            color: #8ab4f8;
-        }
+        [data-theme="dark"] .rich-badge { background: #1A2A3A; color: #8ab4f8; }
 
-        /* Chart containers */
-        .chart-container {
-            position: relative;
-            height: 200px;
-            width: 100%;
-        }
+        .chart-container { position: relative; height: 200px; width: 100%; }
 
-        /* Project selector */
-        .project-selector {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .project-selector { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .project-selector .badge {
             cursor: pointer;
             padding: 6px 14px;
@@ -640,17 +476,9 @@
             color: var(--text);
             transition: all 0.2s;
         }
-        .project-selector .badge.active-project {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        .project-selector .badge:hover:not(.active-project) {
-            background: var(--primary-light);
-            border-color: var(--primary);
-        }
+        .project-selector .badge.active-project { background: var(--primary); color: #fff; border-color: var(--primary); }
+        .project-selector .badge:hover:not(.active-project) { background: var(--primary-light); border-color: var(--primary); }
 
-        /* Gap analysis table */
         .gap-row {
             display: grid;
             grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -660,43 +488,15 @@
             align-items: center;
             font-size: 0.85rem;
         }
-        .gap-row.header {
-            font-weight: 600;
-            color: var(--text-muted);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid var(--border-color);
-        }
-        .gap-row .badge {
-            font-size: 0.7rem;
-        }
+        .gap-row.header { font-weight: 600; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid var(--border-color); }
 
-        .backlink-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.85rem;
-        }
-        .backlink-item:last-child {
-            border-bottom: none;
-        }
+        .backlink-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-color); font-size: 0.85rem; }
+        .backlink-item:last-child { border-bottom: none; }
 
-        .trend-line {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .trend-up {
-            color: var(--success);
-        }
-        .trend-down {
-            color: var(--danger);
-        }
-        .trend-stable {
-            color: var(--warning);
-        }
+        .trend-line { display: flex; align-items: center; gap: 8px; }
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+        .trend-stable { color: var(--warning); }
 
         .generated-content-box {
             background: var(--card-bg);
@@ -713,7 +513,7 @@
 </head>
 <body>
 
-    <!-- BACKGROUND SHAPES -->
+    <!-- Background Shapes -->
     <div class="bg-shape shape-1"></div>
     <div class="bg-shape shape-2"></div>
 
@@ -724,9 +524,9 @@
                 <h2 class="mb-0 d-flex align-items-center gap-2">
                     <span class="material-icons-outlined text-primary" style="font-size:2.4rem;">domain</span>
                     <span>Marketing <span style="font-weight:300;">Command Center</span></span>
-                    <span class="badge bg-primary text-white ms-2 fs-7 fw-normal">v5.0</span>
+                    <span class="badge bg-primary text-white ms-2 fs-7 fw-normal">v6.0</span>
                 </h2>
-                <p class="text-muted mb-0 mt-1 fs-6">AI‑Powered · Multi‑Channel · Enterprise Ready</p>
+                <p class="text-muted mb-0 mt-1 fs-6">Enterprise · Modular · API‑Ready</p>
             </div>
             <div class="col-md-5 text-md-end mt-3 mt-md-0 d-flex flex-wrap align-items-center justify-content-md-end gap-2">
                 <span class="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2">
@@ -776,6 +576,7 @@
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-serp"><span class="material-icons-outlined">preview</span> SERP</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-cwv"><span class="material-icons-outlined">speed</span> Web Vitals</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-trends"><span class="material-icons-outlined">show_chart</span> Trends</button>
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-integrations"><span class="material-icons-outlined">integration_instructions</span> Integrations</button>
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-history"><span class="material-icons-outlined">history</span> History</button>
                         <hr class="my-3 opacity-25" />
                         <button class="nav-link" data-bs-toggle="pill" data-bs-target="#mod-settings"><span class="material-icons-outlined">security</span> Config</button>
@@ -887,18 +688,10 @@
                                 <textarea id="draftContent" class="form-control" rows="5">Modern enterprise software solutions streamline complex organizational workflows. By integrating cloud-based enterprise software, companies can achieve unparalleled scalability and data security. The implementation of robust enterprise software architecture requires careful planning and specialized IT governance.</textarea>
                             </div>
                             <div class="row g-3 mb-3">
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card text-center"><div class="metric-val" id="wordCount">0</div><div class="metric-label">Word Count</div></div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card text-center"><div class="metric-val" id="kwDensity">0%</div><div class="metric-label">Keyword Density</div></div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card text-center"><div class="metric-val" id="readabilityScore">--</div><div class="metric-label">Readability</div></div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="metric-card text-center"><div class="metric-val" id="sentimentScore">😐</div><div class="metric-label">Sentiment</div></div>
-                                </div>
+                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="wordCount">0</div><div class="metric-label">Word Count</div></div></div>
+                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="kwDensity">0%</div><div class="metric-label">Keyword Density</div></div></div>
+                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="readabilityScore">--</div><div class="metric-label">Readability</div></div></div>
+                                <div class="col-md-3 col-6"><div class="metric-card text-center"><div class="metric-val" id="sentimentScore">😐</div><div class="metric-label">Sentiment</div></div></div>
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -1043,10 +836,7 @@
                                     <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="gapContent">0</div><div class="metric-label">Content Gaps</div></div></div>
                                     <div class="col-md-4"><div class="metric-card text-center"><div class="metric-val" id="gapOpp">0</div><div class="metric-label">Opportunities</div></div></div>
                                 </div>
-                                <div class="metric-card">
-                                    <h6 class="fw-bold mb-3">Top Keyword Gaps</h6>
-                                    <div id="gapTable"></div>
-                                </div>
+                                <div class="metric-card"><h6 class="fw-bold mb-3">Top Keyword Gaps</h6><div id="gapTable"></div></div>
                             </div>
                         </div>
 
@@ -1065,10 +855,7 @@
                                     <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blAuthority">0</div><div class="metric-label">Domain Authority</div></div></div>
                                     <div class="col-md-3"><div class="metric-card text-center"><div class="metric-val" id="blSpam">0%</div><div class="metric-label">Spam Score</div></div></div>
                                 </div>
-                                <div class="metric-card">
-                                    <h6 class="fw-bold mb-3">Top Referring Domains</h6>
-                                    <div id="blTable"></div>
-                                </div>
+                                <div class="metric-card"><h6 class="fw-bold mb-3">Top Referring Domains</h6><div id="blTable"></div></div>
                             </div>
                         </div>
 
@@ -1116,6 +903,60 @@
                             <div id="trendLoading" style="display:none;" class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Analyzing trends...</p></div>
                         </div>
 
+                        <!-- ═══ INTEGRATIONS ═══ -->
+                        <div class="tab-pane fade" id="mod-integrations" role="tabpanel">
+                            <h4 class="mb-4">Integrations & Webhooks</h4>
+                            <p class="text-muted fs-7 mb-3">Connect to external marketing systems via API keys and webhooks.</p>
+
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3"><span class="material-icons-outlined text-primary">analytics</span> Google Analytics</h6>
+                                        <div class="mb-2">
+                                            <label class="form-label fs-7">Measurement ID</label>
+                                            <input type="text" id="gaId" class="form-control" placeholder="G-XXXXXXXX" value="G-12345678" />
+                                        </div>
+                                        <button class="btn-outline-custom btn-sm" id="btnConnectGA"><span class="material-icons-outlined">check</span> Connect</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3"><span class="material-icons-outlined text-primary">search</span> Google Search Console</h6>
+                                        <div class="mb-2">
+                                            <label class="form-label fs-7">Property URL</label>
+                                            <input type="text" id="gscProperty" class="form-control" placeholder="https://example.com" value="https://techcorp.com" />
+                                        </div>
+                                        <button class="btn-outline-custom btn-sm" id="btnConnectGSC"><span class="material-icons-outlined">check</span> Connect</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3"><span class="material-icons-outlined text-primary">webhook</span> Outgoing Webhooks</h6>
+                                        <div class="mb-2">
+                                            <label class="form-label fs-7">Webhook URL</label>
+                                            <input type="url" id="webhookUrl" class="form-control" placeholder="https://hook.example.com/endpoint" />
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label fs-7">Secret (optional)</label>
+                                            <input type="password" id="webhookSecret" class="form-control" placeholder="Your secret" />
+                                        </div>
+                                        <button class="btn-outline-custom btn-sm" id="btnTestWebhook"><span class="material-icons-outlined">send</span> Test Webhook</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-card">
+                                        <h6 class="fw-bold mb-3"><span class="material-icons-outlined text-primary">api</span> API Endpoints</h6>
+                                        <p class="fs-7 text-muted">Use these endpoints to pull data programmatically.</p>
+                                        <div class="bg-light p-2 rounded" style="background:var(--card-bg) !important;">
+                                            <code class="fs-7">GET /api/audit?url=...</code><br />
+                                            <code class="fs-7">GET /api/keywords?seed=...</code>
+                                        </div>
+                                        <small class="text-muted fs-8">(Simulated — replace with serverless functions)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- ═══ HISTORY ═══ -->
                         <div class="tab-pane fade" id="mod-history" role="tabpanel">
                             <h4 class="mb-4">Audit History</h4>
@@ -1147,19 +988,27 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         /* ═══════════════════════════════════════════════════════
-           GLOBAL STATE & UTILITIES
+           CORE STATE & UTILITIES (Scalable Architecture)
            ═══════════════════════════════════════════════════════ */
-        const AppState = {
-            projects: JSON.parse(localStorage.getItem('projects') || '{"default":{}}'),
-            currentProject: localStorage.getItem('currentProject') || 'default',
-            apiKeys: JSON.parse(localStorage.getItem('apiKeys') || '{}'),
+        const App = {
+            state: {
+                projects: JSON.parse(localStorage.getItem('projects') || '{"default":{}}'),
+                currentProject: localStorage.getItem('currentProject') || 'default',
+                apiKeys: JSON.parse(localStorage.getItem('apiKeys') || '{}'),
+                integrations: JSON.parse(localStorage.getItem('integrations') || '{}'),
+            },
+            save() {
+                localStorage.setItem('projects', JSON.stringify(this.state.projects));
+                localStorage.setItem('currentProject', this.state.currentProject);
+                localStorage.setItem('apiKeys', JSON.stringify(this.state.apiKeys));
+                localStorage.setItem('integrations', JSON.stringify(this.state.integrations));
+            },
+            getProjectData() {
+                const proj = this.state.currentProject;
+                if (!this.state.projects[proj]) this.state.projects[proj] = {};
+                return this.state.projects[proj];
+            }
         };
-
-        function saveState() {
-            localStorage.setItem('projects', JSON.stringify(AppState.projects));
-            localStorage.setItem('currentProject', AppState.currentProject);
-            localStorage.setItem('apiKeys', JSON.stringify(AppState.apiKeys));
-        }
 
         /* ─── NOTIFIER ─── */
         class Notifier {
@@ -1215,26 +1064,24 @@
                 const badges = this.selector.querySelectorAll('.badge[data-project]');
                 badges.forEach(b => {
                     const proj = b.dataset.project;
-                    b.classList.toggle('active-project', proj === AppState.currentProject);
+                    b.classList.toggle('active-project', proj === App.state.currentProject);
                 });
             }
             switchProject(name) {
-                if (!AppState.projects[name]) return;
-                AppState.currentProject = name;
-                saveState();
+                if (!App.state.projects[name]) return;
+                App.state.currentProject = name;
+                App.save();
                 this.render();
                 Notifier.show(`Switched to project "${name}"`);
-                // Re-run audits if needed (could reload data)
             }
             newProject() {
                 const name = prompt('Enter new project name:');
                 if (!name || name.trim() === '') return;
                 const key = name.trim().replace(/\s+/g, '_').toLowerCase();
-                if (AppState.projects[key]) { Notifier.show('Project already exists.', 'warning'); return; }
-                AppState.projects[key] = {};
-                AppState.currentProject = key;
-                saveState();
-                // Add badge
+                if (App.state.projects[key]) { Notifier.show('Project already exists.', 'warning'); return; }
+                App.state.projects[key] = {};
+                App.state.currentProject = key;
+                App.save();
                 const badge = document.createElement('span');
                 badge.className = 'badge';
                 badge.dataset.project = key;
@@ -1244,14 +1091,13 @@
                 Notifier.show(`Project "${name}" created.`);
             }
             deleteProject() {
-                const current = AppState.currentProject;
+                const current = App.state.currentProject;
                 if (current === 'default') { Notifier.show('Cannot delete default project.', 'error'); return; }
                 if (!confirm(`Delete project "${current}" and all its data?`)) return;
-                delete AppState.projects[current];
-                AppState.currentProject = 'default';
-                saveState();
+                delete App.state.projects[current];
+                App.state.currentProject = 'default';
+                App.save();
                 this.render();
-                // Remove badge
                 const badge = this.selector.querySelector(`.badge[data-project="${current}"]`);
                 if (badge) badge.remove();
                 Notifier.show('Project deleted.');
@@ -1355,7 +1201,6 @@
                 if (!kw) { Notifier.show('Enter a target keyword.', 'warning'); return; }
                 this.aiOutput.style.display = 'block';
                 this.aiOutput.innerText = 'Generating content...';
-                // Simulate API call
                 await this.simulateAI('generate', kw);
                 this.aiOutput.innerText =
                     `# ${kw.charAt(0).toUpperCase() + kw.slice(1)}: The Ultimate Guide\n\nModern ${kw} solutions are transforming how businesses operate. In this comprehensive guide, we'll explore the key benefits, implementation strategies, and future trends. From scalability to security, discover how ${kw} can drive your organization forward.`;
@@ -1528,7 +1373,7 @@
             }
             export() {
                 const data = {
-                    project: AppState.currentProject,
+                    project: App.state.currentProject,
                     timestamp: new Date().toISOString(),
                     metrics: {
                         traffic: document.getElementById('kpiTraffic').innerText,
@@ -1890,11 +1735,9 @@
                 const comps = document.getElementById('competitorDomains').value.split(',').map(s => s.trim()).filter(Boolean);
                 if (!yourDomain || comps.length === 0) { Notifier.show('Enter your domain and at least one competitor.',
                         'warning'); return; }
-                // Simulate gap analysis
                 const keywords = ['enterprise software', 'cloud solutions', 'data security', 'scalability', 'AI integration',
                     'workflow automation', 'IT governance', 'digital transformation'
                 ];
-                const gaps = [];
                 const yourKeywords = keywords.slice(0, 4);
                 const compKeywords = keywords;
                 const missing = compKeywords.filter(k => !yourKeywords.includes(k));
@@ -1929,7 +1772,6 @@
             runBacklinks() {
                 const domain = document.getElementById('backlinkDomain').value.trim();
                 if (!domain) { Notifier.show('Enter a domain.', 'warning'); return; }
-                // Simulate backlink data
                 const total = 1200 + Math.floor(Math.random() * 800);
                 const domains = 340 + Math.floor(Math.random() * 200);
                 const authority = 70 + Math.floor(Math.random() * 20);
@@ -1967,7 +1809,6 @@
                     document.getElementById('trendLoading').style.display = 'none';
                     document.getElementById('trendResults').style.display = 'block';
                     this.btn.disabled = false;
-                    // Render chart
                     const ctx = document.getElementById('trendChart').getContext('2d');
                     if (this.chart) this.chart.destroy();
                     this.chart = new Chart(ctx, {
@@ -1989,14 +1830,12 @@
                         },
                         options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
                     });
-                    // Emerging topics
                     const emerging = ['AI-driven ' + topic, 'Sustainable ' + topic, 'Mobile-first ' + topic,
                         'Serverless ' + topic
                     ];
                     document.getElementById('emergingTopics').innerHTML = emerging.map(t =>
                         `<span class="chip">${t}</span>`
                     ).join('');
-                    // Seasonality insights
                     document.getElementById('seasonalityInsights').innerHTML = `
                         <div class="audit-insight"><span class="material-icons-outlined">info</span> Peak months: September–November (back-to-school)</div>
                         <div class="audit-insight"><span class="material-icons-outlined">info</span> Lowest interest: December–January (holiday slowdown)</div>
@@ -2004,6 +1843,53 @@
                     `;
                     Notifier.show('Trend analysis complete.');
                 }, 800);
+            }
+        }
+
+        /* ─── INTEGRATIONS ─── */
+        class Integrations {
+            constructor() {
+                document.getElementById('btnConnectGA').addEventListener('click', () => this.connectGA());
+                document.getElementById('btnConnectGSC').addEventListener('click', () => this.connectGSC());
+                document.getElementById('btnTestWebhook').addEventListener('click', () => this.testWebhook());
+                // Load saved
+                document.getElementById('gaId').value = App.state.integrations.gaId || '';
+                document.getElementById('gscProperty').value = App.state.integrations.gscProperty || '';
+                document.getElementById('webhookUrl').value = App.state.integrations.webhookUrl || '';
+            }
+            connectGA() {
+                const id = document.getElementById('gaId').value.trim();
+                if (!id) { Notifier.show('Enter a Measurement ID.', 'warning'); return; }
+                App.state.integrations.gaId = id;
+                App.save();
+                Notifier.show('Google Analytics connected (simulated).');
+            }
+            connectGSC() {
+                const prop = document.getElementById('gscProperty').value.trim();
+                if (!prop) { Notifier.show('Enter a property URL.', 'warning'); return; }
+                App.state.integrations.gscProperty = prop;
+                App.save();
+                Notifier.show('Google Search Console connected (simulated).');
+            }
+            async testWebhook() {
+                const url = document.getElementById('webhookUrl').value.trim();
+                if (!url) { Notifier.show('Enter a webhook URL.', 'warning'); return; }
+                const secret = document.getElementById('webhookSecret').value;
+                App.state.integrations.webhookUrl = url;
+                if (secret) App.state.integrations.webhookSecret = secret;
+                App.save();
+                try {
+                    const payload = { event: 'test', timestamp: new Date().toISOString(), data: { message: 'Webhook test' } };
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', ...(secret ? { 'X-Webhook-Secret': secret } : {}) },
+                        body: JSON.stringify(payload),
+                    });
+                    if (response.ok) Notifier.show('Webhook test successful.');
+                    else Notifier.show('Webhook test failed: ' + response.status, 'error');
+                } catch (e) {
+                    Notifier.show('Webhook test failed: ' + e.message, 'error');
+                }
             }
         }
 
@@ -2053,12 +1939,12 @@
         /* ─── SETTINGS (API Keys) ─── */
         class Settings {
             constructor() {
-                document.getElementById('openaiKey').value = AppState.apiKeys.openai || '';
-                document.getElementById('gscKey').value = AppState.apiKeys.gsc || '';
+                document.getElementById('openaiKey').value = App.state.apiKeys.openai || '';
+                document.getElementById('gscKey').value = App.state.apiKeys.gsc || '';
                 document.getElementById('btnSaveKeys').addEventListener('click', () => {
-                    AppState.apiKeys.openai = document.getElementById('openaiKey').value;
-                    AppState.apiKeys.gsc = document.getElementById('gscKey').value;
-                    saveState();
+                    App.state.apiKeys.openai = document.getElementById('openaiKey').value;
+                    App.state.apiKeys.gsc = document.getElementById('gscKey').value;
+                    App.save();
                     Notifier.show('API keys saved securely.');
                 });
             }
@@ -2067,21 +1953,21 @@
         /* ─── INIT ─── */
         document.addEventListener('DOMContentLoaded', () => {
             new ThemeManager();
-            const projectManager = new ProjectManager();
+            new ProjectManager();
             new ContentEngine();
             new SchemaArchitect();
             new SerpPreview();
             new WebVitals();
             new ReportExporter();
             new DashboardCharts();
-            const auditor = new AeoGeoAuditor();
+            new AeoGeoAuditor();
             new TechnicalAuditor();
             new KeywordResearch();
             new CompetitorGap();
             new BacklinkAnalyzer();
             new TrendAnalyzer();
+            new Integrations();
             const historyManager = new HistoryManager();
-            // Make history manager globally accessible for auditor
             window.historyManager = historyManager;
             new Settings();
 
@@ -2096,6 +1982,7 @@
         });
     </script>
 
+    <!-- Cloudflare Analytics (optional) -->
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447"
         integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ=="
         data-cf-beacon='{"version":"2024.11.0","token":"e3c1c9af36de41759418005494a48906","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}'
